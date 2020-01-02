@@ -13,7 +13,7 @@
         </p>
       </div>
       <div style="margin: 20px;padding-top: 20px">
-        <el-form ref="form" :rules="checkLoginform" :model="Loginform" label-width="auto" :label-position="labelPosition">
+        <el-form :rules="checkLoginform" :model="Loginform" label-width="80px" :label-position="labelPosition">
           <el-form-item label="用户名:" prop="username">
             <el-input v-model="Loginform.username"></el-input>
           </el-form-item>
@@ -21,7 +21,7 @@
             <el-input placeholder="请输入密码" v-model="Loginform.password" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit" style="margin-left: -58px;width: 380px;height: 50px">登陆
+            <el-button type="primary" @click="loginHandler" style="margin-left: -80px;width: 380px;height: 50px">登陆
             </el-button>
           </el-form-item>
         </el-form>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import { login } from '../api/api'
+  import { login } from "../api/api";
 
   export default {
     data() {
@@ -39,7 +39,7 @@
         labelPosition: 'left',
         Loginform: {
           username: '',
-          password: ''
+          password: '',
         },
         checkLoginform:{
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
@@ -48,10 +48,10 @@
       }
     },
     methods: {
-      onSubmit() {
+      loginHandler() {
         login(this.Loginform).then(res => {
-          localStorage.setItem('token', res.data.data[0].token);   // 存储token
-          localStorage.setItem('user', res.data.data[0].username);     // 存储用户名
+          localStorage.setItem('token', res.data[0].token);   // 存储token
+          localStorage.setItem('user', res.data[0].username);     // 存储用户名
           this.$router.push({name: 'Home'});   //跳转
           this.$message.success("登陆成功")
         })
