@@ -3,10 +3,11 @@ import axios from 'axios'
 
 class AjaxRequest {
   constructor() {
+    console.log(1)
     // 构造函数
     // 设置baseurl
     // this.baseURL = process.env.NODE_ENV === "producttion" ? "/" : "http://localhost:8090"
-    this.baseURL = "http://localhost:8090"
+    this.baseURL = "http://127.0.0.1:8000";
     // 设置超时时间,5s
     this.timeout = 5000;
   }
@@ -17,22 +18,21 @@ class AjaxRequest {
 
   setInterceptor(instance) {
     // 请求拦截器
-    instance.Interceptors.request.use((config) => {
+    instance.interceptors.request.use((config) => {
       config.headers.Authorization = "abc";
       return config;
     });
     // 响应拦截器
-    instance.Interceptors.response.use((res) => {
+    instance.interceptors.response.use((res) => {
       return res.data;
     });
   }
 
   request(options) {
-    let instance = axios.create();
     let config = this.merge(options);
-    console.log(config)
+    let instance = axios.create(config);
     this.setInterceptor(instance);
-    return instance(config); //返回一个promise
+    return instance; //返回一个promise
   }
 }
 
