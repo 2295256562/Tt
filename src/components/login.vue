@@ -2,8 +2,7 @@
   <div class="page_state">
     <div class="login">
       <div style="padding-top: 20px">
-        <img
-          src="http://www.axshare.cn/gsc/K7I9OT/bd/8f/65/bd8f65cd420c439a840ff7f82d6c32fd/images/登录界面/u986.svg?token=79591caae54d0def9744c4f6e6f8b901b7179964cdcc28500a46e2d0d7c356ed">
+        <!-- <img src="http://www.axshare.cn/gsc/K7I9OT/bd/8f/65/bd8f65cd420c439a840ff7f82d6c32fd/images/登录界面/u986.svg?token=79591caae54d0def9744c4f6e6f8b901b7179964cdcc28500a46e2d0d7c356ed"> -->
       </div>
       <div class="text" style="padding-top: 20px">
         <p style="font-size: 26px;color: #0079FE">
@@ -26,12 +25,11 @@
             <el-button type="primary" @click="loginHandler('Loginform')"
                        style="margin-left: -80px;width: 380px;height: 50px">登陆
             </el-button>
-
-
           </el-form-item>
         </el-form>
       </div>
       <!--三方登陆-->
+      
       <!--忘记密码-->
     </div>
   </div>

@@ -68,7 +68,11 @@
       </el-header>
 
       <!--内容区-->
-      <el-main class="main">Main</el-main>
+      <el-main class="main">
+        <div class="content">
+
+        </div>
+      </el-main>
     </el-container>
 
   </el-container>
@@ -90,8 +94,7 @@
 </script>
 
 <style scoped>
-  @import url('//at.alicdn.com/t/font_1595865_xzc6rjc9sfc.css');
-
+ 
   .left_tab {
     background-color: rgba(0, 21, 41, 1);
     height: 100vh;
@@ -106,6 +109,16 @@
     background-color: bisque;
     padding: 0;
     background-color: rgba(55, 61, 65, 1);
+  }
+
+  .main {
+    background: #f3f6f8;
+  }
+
+  .content {
+    background-color: red;
+    /* padding: 20px; */
+    height: calc(100%);
   }
 
   .user_tab {
@@ -146,9 +159,7 @@
     border-right-width: 0;
   }
 
-  .main {
-    background: #e9ecef;
-  }
+  
   .mar {
     margin-right: 10px
   }
