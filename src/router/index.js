@@ -23,9 +23,12 @@ export default new Router({
       component: Home
     },
     {
-      path: '/PhoneCloud',
-      name: 'PhoneCloud',
-      component: PhoneCloud
+      path: '/APP',
+      name: 'APP',
+      component: Home,
+      children: [
+        {path: 'PhoneCloud', name: "PhoneCloud", component: PhoneCloud}
+      ]
     }
   ]
 })

@@ -6,7 +6,7 @@
       <div class="left_c">
         <el-menu default-active="4" class="el-menu-vertical-demo"
                  background-color="#001529" text-color="white"
-                 style="font-size: 14px;font-family: 'Arial Normal', 'Arial';"
+                 style="font-size: 14px;font-family: 'Arial Normal', 'Arial';" @select="routeTo"
                  @open="handleOpen" @close="handleClose">
 
           <el-menu-item index="4"><i class="iconfont icon-kanban mar"></i><span slot="title">项目数据</span></el-menu-item>
@@ -27,9 +27,9 @@
           </el-submenu>
 
           <!--app测试-->
-          <el-submenu index="3">
-            <template slot="title"><i class="iconfont icon-AppTest mar" ></i><span> APP测试</span></template>
-            <el-menu-item index="3-1" class="iconfont icon-yunzhenji mar_item">云测真机</el-menu-item>
+          <el-submenu index="/APP">
+            <template slot="title"><i class="iconfont icon-AppTest mar"></i><span> APP测试</span></template>
+            <el-menu-item index="/APP/PhoneCloud" class="iconfont icon-yunzhenji mar_item">云测真机</el-menu-item>
             <el-submenu index="3-2">
               <template slot="title"><i class="iconfont icon-xiangmu mar_item"></i><span>monkey测试</span></template>
               <el-menu-item index="3-2-1">随机测试</el-menu-item>
@@ -70,7 +70,7 @@
       <!--内容区-->
       <el-main class="main">
         <div class="content">
-
+          <router-view/>
         </div>
       </el-main>
     </el-container>
@@ -81,20 +81,23 @@
 <script>
   export default {
     data() {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
       return {
-        tableData: Array(20).fill(item)
+
+      }
+    },
+    methods: {
+      routeTo(key, path) {
+        console.log(path, '111')
+        if (this.$route.path === key)
+          return;
+        this.$router.push({path: key})
       }
     }
   }
 </script>
 
 <style scoped>
- 
+
   .left_tab {
     background-color: rgba(0, 21, 41, 1);
     height: 100vh;
@@ -116,9 +119,9 @@
   }
 
   .content {
-    background-color: red;
+    /*background-color: red;*/
     /* padding: 20px; */
-    height: calc(100%);
+    /*height: calc(100%);*/
   }
 
   .user_tab {
@@ -159,10 +162,11 @@
     border-right-width: 0;
   }
 
-  
+
   .mar {
     margin-right: 10px
   }
+
   .mar_item {
     margin-left: 6px;
   }
