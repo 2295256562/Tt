@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from '@/components/login.vue'
 import PhoneCloud from '@/components/APP/phonecloud'
+import APITest from '@/components/API/API'
 import Home from '@/components/home.vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -28,6 +29,14 @@ export default new Router({
       component: Home,
       children: [
         {path: 'PhoneCloud', name: "PhoneCloud", component: PhoneCloud}
+      ]
+    },
+    {
+      path: '/api',
+      name: 'API',
+      component: Home,
+      children: [
+        {path: 'APITest', name: "APITest", component: APITest}
       ]
     }
   ]

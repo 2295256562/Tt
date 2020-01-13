@@ -19,10 +19,10 @@
           </el-submenu>
 
           <!--接口自动化-->
-          <el-submenu index="2">
+          <el-submenu index="/api">
             <template slot="title"><i class="iconfont icon-icon-menu-m0640 mar"></i><span> 接口测试</span></template>
             <el-menu-item index="2-1" class="iconfont icon-zhenduan mar_item">抓包管理</el-menu-item>
-            <el-menu-item index="2-2" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>
+            <el-menu-item index="/api/APITest" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>
             <el-menu-item index="2-3" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>
           </el-submenu>
 
@@ -52,12 +52,12 @@
         <div class="user_tab">
           <div class="user_info">
             <!--用户信息-->
-            <div>
-              <el-menu class="el-menu-demo" mode="horizontal" background-color="rgba(55, 61, 65, 1)">
+            <div class="a">
+              <el-menu class="el-menu-demo" mode="horizontal" background-color="rgba(55, 61, 65, 1)" menu-trigger="click">
                 <el-submenu index="2">
-                  <template slot="title" style="width: 60px"> admin</template>
-                  <el-menu-item style="width: 60px" index="2-1">修改密码</el-menu-item>
-                  <el-menu-item style="width: 60px">基本信息</el-menu-item>
+                  <template slot="title"> admin</template>
+                  <el-menu-item index="2-1" >修改密码</el-menu-item>
+                  <el-menu-item >基本信息</el-menu-item>
                 </el-submenu>
                 <el-menu-item class="el-icon-message-solid"></el-menu-item>
                 <el-menu-item class="iconfont icon-signOut"></el-menu-item>
@@ -87,7 +87,6 @@
     },
     methods: {
       routeTo(key, path) {
-        console.log(path, '111')
         if (this.$route.path === key)
           return;
         this.$router.push({path: key})
@@ -116,12 +115,16 @@
 
   .main {
     background: #f3f6f8;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
   }
 
   .content {
-    /*background-color: red;*/
-    /* padding: 20px; */
-    /*height: calc(100%);*/
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
   }
 
   .user_tab {
@@ -172,12 +175,17 @@
   }
 </style>
 <style>
-  .el-menu--horizontal > .el-submenu > .el-menu-item {
-    height: 60px;
-    width: 60px;
-    line-height: 60px;
-    border-bottom: 2px solid transparent;
-    color: #fff;
-    font-size: 20px;
-  }
+  /*.el-menu--horizontal > .el-submenu > .el-menu-item {*/
+  /*  height: 60px;*/
+  /*  width: 60px;*/
+  /*  line-height: 60px;*/
+  /*  border-bottom: 2px solid transparent;*/
+  /*  color: #fff;*/
+  /*  font-size: 20px;*/
+  /*}*/
+  /*.a .el-menu--horizontal {*/
+  /*  width: 60px;*/
+  /*  overflow: hidden;*/
+  /*}*/
+
 </style>

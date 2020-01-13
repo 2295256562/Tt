@@ -42,9 +42,13 @@
 
     <!--列表-->
     <div class="cloud-list">
-      <div >
-        <el-tabs type="border-card">
-          <el-tab-pane label="用户管理">全部机型</el-tab-pane>
+      <div style="width: 100%; height: 100%">
+        <el-tabs type="border-card" style="width: 100%; height: 100%">
+          <el-tab-pane label="全部机型">
+            <div class="div-context">
+
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="配置管理">空闲机型</el-tab-pane>
           <el-tab-pane label="角色管理">我占用的</el-tab-pane>
         </el-tabs>
@@ -78,42 +82,44 @@
 <style>
 
   .cloud {
-    /*height: 100vh;*/
+    height: 100%;
     /*display: table;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
 
   .cloud-filter {
-    /* display: flex; */
-    height: 24%;
     min-height: 24%;
     background-color: bisque;
     width: 100%;
-    overflow: hidden
   }
 
   .cloud-list {
-    height: 67vh;
+    flex: 1;
+    width: 100%;
     background-color: aquamarine;
     margin-top: 20px;
   }
 
+  .div-context {
+    height: 100%;
+    width: 100%;
+  }
+
   .filter {
-    /* float: left; */
     display: flex;
     padding: 5px;
   }
 
   .filter_left {
-    /* float: left; */
     padding: 10px;
     width: 86px;
     font-size: 14px
   }
 
   .filter_right {
-    /*float: left;*/
     flex: 1;
-    padding: 0, 10px, 0, 0;
   }
 </style>
