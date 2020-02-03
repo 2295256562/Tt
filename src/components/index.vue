@@ -6,6 +6,7 @@
         <div class="data-text">用例总数</div>
         <div>
           <i class="iconfont icon-test-case-group-copy size"></i>
+          <span>{{ caseNumber }}</span>
         </div>
       </div>
 
@@ -37,14 +38,20 @@
       </div>
 
     </div>
-    <div class="report"></div>
+    <div class="report" id="c1">
+
+    </div>
     <div></div>
   </div>
 </template>
 
 <script>
   export default {
-    name: "index"
+    data() {
+      return {
+        caseNumber: 11
+      }
+    }
   }
 </script>
 
@@ -75,7 +82,7 @@
 
   .report {
     margin: 20px;
-    width: 60%;
+    width: auto;
     height: 78%;
     /*background-color: #999999;*/
     border: 1px solid #999999;
