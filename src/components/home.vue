@@ -4,18 +4,18 @@
     <el-aside width="200px" class="left_tab">
       <!--导航菜单-->
       <div class="left_c">
-        <el-menu default-active="4" class="el-menu-vertical-demo"
+        <el-menu :default-active="$route.path" class="el-menu-vertical-demo"
                  background-color="#001529" text-color="white"
                  style="font-size: 14px;font-family: 'Arial Normal', 'Arial';" @select="routeTo"
                  @open="handleOpen" @close="handleClose">
 
-          <el-menu-item index="4"><i class="iconfont icon-kanban mar"></i><span slot="title">项目数据</span></el-menu-item>
+          <el-menu-item index="/index"><i class="iconfont icon-kanban mar"></i><span slot="title">项目数据</span></el-menu-item>
 
           <!--项目管理-->
-          <el-submenu index="1">
+          <el-submenu index="/product">
             <template slot="title"><i class="iconfont icon-xiangmu mar"></i><span>项目管理</span></template>
-            <el-menu-item index="1-1" class="iconfont icon-xiangmumingcheng mar_item">项目名称</el-menu-item>
-            <el-menu-item index="1-2" class="iconfont icon-mokuai mar_item">模块列表</el-menu-item>
+            <el-menu-item index="/product/project" class="iconfont icon-xiangmumingcheng mar_item">项目列表</el-menu-item>
+            <el-menu-item index="/product/model" class="iconfont icon-mokuai mar_item">模块列表</el-menu-item>
           </el-submenu>
 
           <!--接口自动化-->
@@ -90,7 +90,9 @@
         if (this.$route.path === key)
           return;
         this.$router.push({path: key})
-      }
+      },
+      handleOpen (){},
+      handleClose(){}
     }
   }
 </script>
