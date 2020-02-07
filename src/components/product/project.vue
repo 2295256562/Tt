@@ -31,7 +31,7 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="addAddres">新增环境</el-button>
           <el-button @click="dialogFormVisible = false ">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="addProjectApi">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+  import { addProject } from "../../api/api";
   export default {
     data() {
       return {
@@ -69,7 +70,7 @@
         }],
         env: [{envName: '', envAddres: ''}],
         dialogFormVisible: false,
-        projectForm: {name: '', address: ''}
+        projectForm: {name: '', address: this.env}
       }
     },
     rulesprojectForm: {},
@@ -80,6 +81,15 @@
         this.env.push(
           {envName: '', envAddres: ''}
         )
+      },
+
+      //新增项目接口
+      addProjectApi() {
+        console.log(1111);
+        addProject(this.projectForm).then(
+          console.log('1111')
+        );
+        dialogFormVisible = false
       },
 
       //删除项目环境

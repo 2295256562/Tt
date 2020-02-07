@@ -137,9 +137,9 @@
       </el-dialog>
 
       <!--响应结果-->
-      <div style="margin-top: 20px;margin-left: 10px">
+      <div style="margin-top: 20px;margin-left: 10px;height: 45%">
         <p>响应结果:</p>
-        <div style="height: 480px; width: 96%;background-color: cadetblue;margin-top: 5px"></div>
+        <div style="height:90%; width: 96%;background-color: cadetblue;margin-top: 5px"></div>
       </div>
 
       <!--校验结果-->
@@ -284,7 +284,7 @@
   }
 
   .api-left {
-    height: auto;
+    /*height: auto;*/
     width: 12%;
     float: left;
     border-right: 0.5px solid #f3f6f8;
@@ -292,7 +292,6 @@
 
   .api-right {
     /*background-color: green;*/
-    /*overflow: auto;*/
     float: left;
     width: 66%;
     overflow: auto;
@@ -302,6 +301,7 @@
     background-color: antiquewhite;
     float: left;
     width: 22%;
+    height: 100%;
   }
 
   .api-right > .el-form> .details {
@@ -355,7 +355,7 @@
     width: 80%;
     margin-left: 10px;
     float: left;
-    overflow: auto;
+    /*overflow: auto;*/
   }
 
   .aver-div {

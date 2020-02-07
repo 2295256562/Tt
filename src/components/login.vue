@@ -4,6 +4,8 @@
       <div style="padding-top: 20px">
         <!-- <img src="http://www.axshare.cn/gsc/K7I9OT/bd/8f/65/bd8f65cd420c439a840ff7f82d6c32fd/images/登录界面/u986.svg?token=79591caae54d0def9744c4f6e6f8b901b7179964cdcc28500a46e2d0d7c356ed"> -->
       </div>
+
+
       <div class="text" style="padding-top: 20px">
         <p style="font-size: 26px;color: #0079FE">
           <span style="font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight:700;">
@@ -29,8 +31,10 @@
         </el-form>
       </div>
       <!--三方登陆-->
-      
-      <!--忘记密码-->
+      <div style="display: flex">
+        <el-checkbox v-model="checked"  style="padding-left: 20px">记住密码</el-checkbox>
+        <div  style="text-align: right; padding-left: 55%" @click="forgetPassword">忘记密码?</div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,18 +53,32 @@
         checkLoginform: {
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
           password: [{required: true, message: '请输入密码', trigger: 'blur'}],
-        }
+        },
+        checked: false
       }
     },
     methods: {
       loginHandler() {
         login(this.Loginform).then(res => {
-          // localStorage.setItem('token', res.data[0].token);   // 存储token
+          console.log(res.data.token);
+          if (this.checked == 1){
+            // 存储token
+            localStorage.setItem('token', res.data.token);
+          }else {
+
+          }
           // localStorage.setItem('user', res.data[0].username);     // 存储用户名
-          // this.$router.push({name: 'Home'});   //跳转
+          this.$router.push({name: 'Index'});   //跳转
           // this.$message.success("登陆成功")
+        }).catch(err => {
+          err.data.non_field_errors[0]
         })
       },
+
+      // 忘记密码
+      forgetPassword() {
+
+      }
     }
   }
 </script>
@@ -79,7 +97,7 @@
     background-color: rgba(255, 255, 255, 1);
     text-align: center;
     width: 420px;
-    height: 580px;
+    height: 46%;
     border-radius: 20px;
   }
 </style>

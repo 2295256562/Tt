@@ -60,7 +60,7 @@
                   <el-menu-item >基本信息</el-menu-item>
                 </el-submenu>
                 <el-menu-item class="el-icon-message-solid"></el-menu-item>
-                <el-menu-item class="iconfont icon-signOut"></el-menu-item>
+                <el-menu-item class="iconfont icon-signOut" @click="logout"></el-menu-item>
               </el-menu>
             </div>
           </div>
@@ -92,7 +92,15 @@
         this.$router.push({path: key})
       },
       handleOpen (){},
-      handleClose(){}
+      handleClose(){},
+
+
+      // 退出登陆
+      logout() {
+        localStorage.removeItem('token');
+        // localStorage.removeItem('user');
+        this.$router.push({ name:'LoginPage' })
+      }
     }
   }
 </script>
