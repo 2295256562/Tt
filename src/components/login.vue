@@ -60,18 +60,24 @@
     methods: {
       loginHandler() {
         login(this.Loginform).then(res => {
-          console.log(res.data.token);
-          if (this.checked == 1){
-            // 存储token
-            localStorage.setItem('token', res.data.token);
+          // console.log(res.data.token);
+          //判断用户是否点击记住密码
+          if (this.checked){
+            // 记住密码
+            localStorage.token =  res.data.token;
+            sessionStorage.token = null;
           }else {
-
+            //没记住密码
+            sessionStorage.token = res.data.token;
+            localStorage.token = null;
           }
-          // localStorage.setItem('user', res.data[0].username);     // 存储用户名
-          this.$router.push({name: 'Index'});   //跳转
+          //跳转
+          this.$message.success(this.username + "：登陆成功")
+          this.$router.push({name: 'Index'});
           // this.$message.success("登陆成功")
         }).catch(err => {
-          err.data.non_field_errors[0]
+          console.log(err.response.data);
+          this.$message.error(err.response.data.non_field_errors[0])
         })
       },
 

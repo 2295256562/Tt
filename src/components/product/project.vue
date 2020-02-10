@@ -19,9 +19,9 @@
                  :before-close="handleClose" v-if="dialogFormVisible">
         <el-form :model="projectForm" label-width="80px" label-position="left" :inline="true" :rules="rulesprojectForm">
           <el-form-item label="项目名称:" prop="name">
-            <el-input v-model="projectForm.name" size="small" style="width: 180px" placeholder="请输入项目名称"></el-input>
+            <el-input v-model="projectForm.project_name" size="small" style="width: 180px" placeholder="请输入项目名称"></el-input>
           </el-form-item>
-          <el-form-item :label="'项目环境'+ index" v-for="(item, index) in env" :key="index" :model="projectForm.address">
+          <el-form-item :label="'项目环境'+ index" v-for="(item, index) in env" :key="index" :model="projectForm.project_address">
             <el-input v-model="item.envName" size="small" style="width: 180px" placeholder="请输入项目环境名称"></el-input>
             <el-input v-model="item.envAddres" size="small" style="width: 180px" placeholder="请输入环境域名"></el-input>
             <el-button type="primary" size="small" @click="deleteAdders">删除</el-button>
@@ -70,7 +70,7 @@
         }],
         env: [{envName: '', envAddres: ''}],
         dialogFormVisible: false,
-        projectForm: {name: '', address: this.env}
+        projectForm: { project_name: '', project_address: this.env }
       }
     },
     rulesprojectForm: {},
@@ -85,9 +85,9 @@
 
       //新增项目接口
       addProjectApi() {
-        console.log(1111);
+        console.log(this.env);
+        console.log(this.projectForm);
         addProject(this.projectForm).then(
-          console.log('1111')
         );
         dialogFormVisible = false
       },
