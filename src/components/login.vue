@@ -33,7 +33,7 @@
       <!--三方登陆-->
       <div style="display: flex">
         <el-checkbox v-model="checked"  style="padding-left: 20px">记住密码</el-checkbox>
-        <div  style="text-align: right; padding-left: 55%" @click="forgetPassword">忘记密码?</div>
+        <div  style="text-align: right; padding-left: 50%" @click="forgetPassword">忘记密码?</div>
       </div>
     </div>
   </div>
@@ -72,12 +72,12 @@
             localStorage.token = null;
           }
           //跳转
-          this.$message.success(this.username + "：登陆成功")
+          this.$message.success(this.Loginform.username + "：登陆成功")
           this.$router.push({name: 'Index'});
           // this.$message.success("登陆成功")
         }).catch(err => {
-          console.log(err.response.data);
-          this.$message.error(err.response.data.non_field_errors[0])
+          console.log(err.data);
+          // this.$message.error(err.data.non_field_errors[0])
         })
       },
 
