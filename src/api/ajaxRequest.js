@@ -27,13 +27,16 @@
 
 import axios from 'axios'
 import Vue from 'vue'
+import router from '@/router'
+import { Loading, Message } from 'element-ui' // 引用element-ui的加载和消息提示组件
+
 
 
 const $axios = axios.create({
   // 设置超时时间
   timeout: 30000,
   // 基础url，会在请求url中自动添加前置链接
-  baseURL: process.env.VUE_APP_BASE_API
+  baseURL:  'http://127.0.0.1:8000/api/v1'
 })
 Vue.prototype.$http = axios // 这里并发请求以便在组件使用this.$http.all()，具体看dashborad页面
 
@@ -46,7 +49,7 @@ let loading = null
  */
 $axios.interceptors.request.use(
   config => {
-    loading = Loading.service({ text: '拼命加载中' })
+    loading = Loading.service({ text: '拼命加载中' });
     const token = sessionStorage.getItem('token');
     if (token) {
       config.headers.Authorization = token // 请求头部添加token
@@ -78,12 +81,14 @@ $axios.interceptors.response.use(
     if (loading) {
       loading.close()
     }
-    console.log(error)
+    console.log(error);
     if (error.response) {
       switch (error.response.status) {
         case 401:
           // 返回401 清除token信息并跳转到登陆页面
-          sessionStorage.removeItem('token')
+          console.log(error.response.status);
+          Message.error('登陆信息失效,请重新登陆');
+          sessionStorage.removeItem('token');
           router.replace({
             path: '/login',
             query: {

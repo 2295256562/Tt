@@ -1,24 +1,41 @@
 <template>
   <div class="api-list">
     <!--列表区-->
-    <div class="api-left">
-      <div style="text-align: center;align-items: center; margin: 10px">
-        <el-input placeholder="请输入筛选条件" v-model="modeldata"></el-input>
-        <el-tree class="filter-tree" :data="modeldatas" :props="defaultProps" default-expand-all
-                 :filter-node-method="filterNode" ref="tree" style="padding-top: 10px">
-        </el-tree>
-      </div>
-    </div>
+    <!--    <div class="api-left">-->
+    <!--      <div style="text-align: center;align-items: center; margin: 10px">-->
+    <!--        <el-input placeholder="请输入筛选条件" v-model="modeldata"></el-input>-->
+    <!--        <el-tree class="filter-tree" :data="modeldatas" :props="defaultProps" default-expand-all-->
+    <!--                 :filter-node-method="filterNode" ref="tree" style="padding-top: 10px">-->
+    <!--        </el-tree>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <!--表单区-->
     <div class="api-right">
 
-      <el-form ref="form" :model="apiFrom" label-width="80px">
+      <el-form ref="form" :model="apiFrom" :rules="rules" label-width="80px">
         <div class="details">
           <el-divider content-position="left">基本信息</el-divider>
+
+          <el-form-item label="用例名称" prop="case_name">
+            <el-input v-model="apiFrom.case_name" size="small" placeholder="请输入用例名称" style="width: 90%"></el-input>
+          </el-form-item>
+
           <div class="de-input">
-            <span>用例名称:</span>
-            <el-input v-model="apiFrom.case_name" size="small" placeholder="请输入用例名称"></el-input>
+            <span>所属项目:</span>
+            <el-select v-model="apiFrom.belongProject" filterable clearable placeholder="请选择所属项目" size="small"
+                       style="padding-left: 10px;" @change="changeproject">
+              <el-option v-for="item in BelongProjectList" :key="item.id" :label="item.project_name"
+                         :value="item.id"></el-option>
+            </el-select>
+
+            <span style="padding-left: 10px">所属模块:</span>
+            <el-select v-model="apiFrom.belongModel" filterable clearable placeholder="请选择所属项目" size="small"
+                       style="padding-left: 10px;">
+              <el-option v-for="item in BelongModel" :key="item" :label="item"
+                         :value="item">{{item}}
+              </el-option>
+            </el-select>
           </div>
 
           <el-divider content-position="left">请求设置</el-divider>
@@ -38,7 +55,7 @@
           <div class="de-input">
             <span>参数类型:</span>
             <template>
-              <el-radio-group v-model="apiFrom.method_type">
+              <el-radio-group v-model="apiFrom.parameter_type">
                 <el-radio v-for="item in canUseMethods" :key="item.label" :label="item.label">{{ item.text }}</el-radio>
               </el-radio-group>
             </template>
@@ -86,6 +103,12 @@
               </div>
             </div>
           </div>
+
+
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button @click="back">取消</el-button>
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -96,13 +119,13 @@
       <!--调试区-->
       <div style="margin-top: 20px;margin-left: 10px">
         <p>调试域名:</p>
-        <el-input v-model="sendTest" size="mini" style="width: 70%;height: 10px;margin-top: 12px;"></el-input>
-        <el-button size="mini" type="primary">调试</el-button>
+        <el-input v-model="domain" size="mini" style="width: 70%;height: 10px;margin-top: 12px;"></el-input>
+        <el-button size="mini" type="primary" @click="Send">调试</el-button>
       </div>
 
       <!--请求头设置-->
       <el-button type="text" @click="dialogVisible = true" style="margin-left: 10px">请求头设置</el-button>
-      <el-dialog title="请求头设置" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <el-dialog title="请求头设置" :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
         <span>请求头:</span>
         <el-input v-model="headerFilter" placeholder="请输入筛选条件" style="width:30%"></el-input>
 
@@ -112,7 +135,8 @@
             <el-select v-model="item.headerSetKey" filterable allow-create default-first-option
                        placeholder="key"
                        size="mini" style="width: 45%">
-              <el-option v-for="item in headersListkey" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in headersListkey" :key="item.value" :label="item.label"
+                         :value="item.value"></el-option>
             </el-select>
 
             <!--value-->
@@ -139,7 +163,11 @@
       <!--响应结果-->
       <div style="margin-top: 20px;margin-left: 10px;height: 45%">
         <p>响应结果:</p>
-        <div style="height:90%; width: 96%;background-color: cadetblue;margin-top: 5px"></div>
+        <div style="height:200px; width: 96%;margin-top: 5px; background-color: #9999FF">
+          <template style="height:200px; width: 96%;margin-top: 5px">
+            <json-view :data="json" :font-size="12"/>
+          </template>
+        </div>
       </div>
 
       <!--校验结果-->
@@ -152,128 +180,215 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        modeldata: '',
-        defaultProps: '',
-        sendTest: '',
+    import {sourceprojectList, sendInterfaces, allModel, addApiCase} from '../../api/api';
+    // import jsonView from '@/components/json-view';
+    import jsonView from 'vue-json-views'
 
-        modeldatas: [{
-          id: 3,
-          label: '一级 3',
-          children: [{
-            id: 7,
-            label: '二级 3-1'
-          }, {
-            id: 8,
-            label: '二级 3-2'
-          }]
-        }],
-        Request_data: [
-          {key: '', value: '', desc: '', initiate: true}
-        ],
-        dialogVisible: false,
-        headerFilter: '',
-        HeadersList: [
-          {headerSetKey: '', headersSetValue: '', headersStatus: true,}
-        ],
-        headersListkey: [
-          {value: 'Accept', lable: 'Accept'},
-          {value: 'Referer', lable: 'Referer'},
-          {value: 'Cache-Control', lable: 'Cache-Control'},
-          {value: 'User-Agent', lable: 'User-Agent'},
-          {value: 'Host', lable: 'Host'},
-          {value: 'Content-Type', lable: 'Content-Type'}
-        ],
-        apiFrom: {
-          case_name: '',
-          api_method: '1',
-          api_url: '',
-          method_type: 1,
-          aver: 'text_response',
-          averText: '',
+
+    export default {
+
+        // 初始化方法
+        created() {
+            this.sourceProjects()
+        },
+
+        data() {
+            return {
+                modeldata: '',
+                defaultProps: '',
+                domain: '',
+                Request_data: [
+                    {key: '', value: '', desc: '', initiate: true}
+                ],
+                dialogVisible: false,
+                headerFilter: '',
+                HeadersList: [
+                    {headerSetKey: '', headersSetValue: '', headersStatus: true,}
+                ],
+                headersListkey: [
+                    {value: 'Accept', lable: 'Accept'},
+                    {value: 'Referer', lable: 'Referer'},
+                    {value: 'Cache-Control', lable: 'Cache-Control'},
+                    {value: 'User-Agent', lable: 'User-Agent'},
+                    {value: 'Host', lable: 'Host'},
+                    {value: 'Content-Type', lable: 'Content-Type'}
+                ],
+                apiFrom: {
+                    case_name: '',
+                    belongProject: '',
+                    belongModel: '',
+                    api_method: '1',
+                    api_url: '',
+                    parameter_type: 1,
+                    aver: 'text_response',
+                    averText: '',
+                    params: this.Request_data,
+                },
+                rules: {
+                    case_name: [{required: true, message: '请输入用例名称', trigger: 'change'}],
+                },
+                BelongProjectList: [],   // 所属项目
+                BelongModel: [], // 所属模块
+                json: {},
+            }
+        },
+        watch: {
+            filterText(val) {
+                this.$refs.tree.filter(val)
+            }
+        },
+
+        components: {
+            jsonView
+        },
+
+        computed: {
+            canUseMethods() {
+                const {api_method} = this.apiFrom;
+                const GET = '1';
+                const POST = '2';
+                const PUT = '3';
+                const DELETE = '4';
+
+                if (api_method === GET) {
+                    return [{text: 'params', label: 1}]
+                }
+                if (api_method === POST) {
+                    return [{text: 'x-www-form-urlencoded', label: 1}, {text: 'json', label: 2}, {
+                        text: 'form-data',
+                        label: 3
+                    }]
+                }
+
+                if (api_method === PUT) {
+                    return [{text: 'params', label: 1}, {text: 'json', label: 2}]
+                }
+
+                if (api_method === DELETE) {
+                    return [{text: 'params', label: 1}, {text: 'json', label: 2}]
+                }
+                return []
+            },
+
+        },
+        methods: {
+
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
+
+            // 所属项目
+            sourceProjects() {
+                sourceprojectList().then(res => {
+                    // console.log(res.data.data);
+                    this.BelongProjectList = res.data.data;
+                    // console.log(this.belongProjectlist, '2222')
+                })
+            },
+
+            // 新增请求参数
+            addRequestParams() {
+                this.Request_data.push(
+                    {key: '', value: '', desc: '', initiate: true}
+                );
+                this.$nextTick(() => {
+                    this.HoldBot('request-overflow')
+                })
+            },
+
+            // 删除请求参数
+            DelRequestParams(index) {
+                this.Request_data.splice(index, 1);
+                if (this.Request_data.length === 0) {
+                    this.Request_data.push({key: '', value: '', desc: '', initiate: true})
+                }
+            },
+
+            //div滚动条保持在最底部
+            HoldBot(elementid) {
+                const DIV = document.getElementById(elementid);
+                DIV.scrollTop = DIV.scrollHeight;
+            },
+
+            //请求头设置
+            open_headers() {
+
+            },
+
+            //关闭请求头弹窗设置
+            handleClose(done) {
+                this.$confirm('确认关闭? ').then(_ => {
+                    done();
+                    this.HeadersList = [
+                        {headerSetKey: '', headersSetValue: '', headersStatus: true,}
+                    ]
+                }).catch(_ => {
+                })
+            },
+
+            //新增headers参数
+            addHeaders() {
+                this.HeadersList.push(
+                    {headerSetKey: '', headersSetValue: '', headersStatus: true}
+                );
+                this.$nextTick(() => {
+                    this.HoldBot('headersID')
+                })
+            },
+
+            // 创建事件
+            onSubmit() {
+                const obj = {
+                    case_name: this.apiFrom.case_name,
+                    project_id: this.apiFrom.belongProject,
+                    model: this.apiFrom.belongModel,
+                    method: this.apiFrom.api_method,
+                    url : this.apiFrom.api_url,
+                    type: this.apiFrom.parameter_type,
+                    checkType: this.apiFrom.aver,
+                    checkText: this.apiFrom.averText,
+                    params: this.Request_data,
+                };
+                console.log(obj);
+                addApiCase(obj).then(res=>{
+
+                })
+            },
+
+            // 调试按钮事件
+            Send() {
+                const obj = {
+                    url: this.domain + this.apiFrom.api_url,
+                    method: this.apiFrom.api_method,
+                    params: this.Request_data,
+                    headers: this.HeadersList,
+                    type: this.apiFrom.parameter_type,
+                };
+                console.log(obj, '222')
+                sendInterfaces(obj).then(res => {
+                    this.json = res.data.data
+                })
+            },
+
+            // 下拉框change事件
+            changeproject(selVal) {
+                //1.拿到所属项目选择的id,获取当前项目的所有模块赋值给所属模块下拉框
+                if (selVal !== null) {
+                    allModel(selVal).then(res => {
+                        this.belongModel = null;
+                        this.BelongModel = res.data.data[0].model_name.split(',')
+                    })
+                }
+            },
+
+            // 返回按钮
+            back() {
+                this.$router.go(-1)
+            }
+
         }
-      }
-    },
-    watch: {
-      filterText(val) {
-        this.$refs.tree.filter(val)
-      }
-    },
-    computed: {
-      canUseMethods() {
-        const {api_method} = this.apiFrom;
-        const GET = '1';
-        const POST = '2';
-        if (api_method === GET) {
-          return [{text: 'params', label: 1}]
-        }
-        if (api_method === POST) {
-          return [{text: 'x-www-form-urlencoded', label: 1}, {text: 'json', label: 2}, {text: 'form-data', label: 3}]
-        }
-        return []
-      },
-
-    },
-    methods: {
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
-      },
-
-      // 新增请求参数
-      addRequestParams() {
-        this.Request_data.push(
-          {key: '', value: '', desc: '', initiate: true}
-        );
-        this.$nextTick(() => {
-          this.HoldBot('request-overflow')
-        })
-      },
-
-      // 删除请求参数
-      DelRequestParams(index) {
-        this.Request_data.splice(index, 1);
-        if (this.Request_data.length === 0) {
-          this.Request_data.push({key: '', value: '', desc: '', initiate: true})
-        }
-      },
-
-      //div滚动条保持在最底部
-      HoldBot(elementid) {
-        const DIV = document.getElementById(elementid);
-        DIV.scrollTop = DIV.scrollHeight;
-        // console.log(DIV.scrollHeight, 'height')
-      },
-
-      //请求头设置
-      open_headers() {
-
-      },
-
-      //关闭请求头弹窗设置
-      handleClose(done) {
-        this.$confirm('确认关闭? ').then(_ => {
-          done();
-          this.HeadersList = [
-            {headerSetKey: '', headersSetValue: '', headersStatus: true,}
-          ]
-        }).catch(_ => {
-        })
-      },
-
-      //新增headers参数
-      addHeaders() {
-        this.HeadersList.push(
-          {headerSetKey: '', headersSetValue: '', headersStatus: true}
-        );
-        this.$nextTick(() => {
-          this.HoldBot('headersID')
-        })
-      }
     }
-  }
 </script>
 
 <style scoped>
@@ -293,7 +408,7 @@
   .api-right {
     /*background-color: green;*/
     float: left;
-    width: 66%;
+    width: 78%;
     overflow: auto;
   }
 
@@ -304,14 +419,14 @@
     height: 100%;
   }
 
-  .api-right > .el-form> .details {
+  .api-right > .el-form > .details {
     margin-left: 10px;
     margin-right: 20px;
     margin-top: 80px;
 
   }
 
-  .api-right >.el-form> .details > .de-input {
+  .api-right > .el-form > .details > .de-input {
     margin-bottom: 16px;
     margin-left: 10px;
   }

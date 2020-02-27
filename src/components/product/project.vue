@@ -1,13 +1,18 @@
 <template>
   <div>
+
     <div class="topdiv">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>项目管理</el-breadcrumb-item>
         <el-breadcrumb-item>项目列表</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+
     <div class="productdiv">
+
       <div style="width: 100%;height: 60px;">
+
+        <!-- 筛选 -->
         <span>项目名称:</span>
         <el-input v-model="projectName" size="small" style="width: 180px" placeholder="请输入内容"></el-input>
         <el-button type="primary" size="small" icon="el-icon-search" @click="seachbtn">搜索</el-button>
@@ -41,7 +46,8 @@
       </div>
 
       <div>
-        <el-table :data="projectData" border style="width: 100%" header-align="center">
+        <!-- 表格 -->
+        <el-table :data="projectData" height="500" border style="width: 100%" header-align="center">
           <el-table-column prop="project_name" label="项目名称" width="180" align="center"></el-table-column>
           <el-table-column prop="create_user" label="项目创建人" align="center"></el-table-column>
           <el-table-column prop="create_time" label="项目创建日期" align="center"></el-table-column>
@@ -52,14 +58,10 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <!-- 分页-->
         <div style="margin-top: 10px;float:right">
-          <el-pagination
-            background
-            layout="total, prev, pager, next"
-            :total="total"
-            :current-page.sync="handlepage"
-            @current-change="handleCurrentChange"
-          ></el-pagination>
+          <el-pagination background layout="total, prev, pager, next" :total="total" :current-page.sync="handlepage" @current-change="handleCurrentChange"></el-pagination>
         </div>
       </div>
 
@@ -76,6 +78,7 @@
     created() {
       this.Lproject()
     },
+
     data() {
       return {
         projectName: '',
@@ -87,7 +90,6 @@
         dialogFormVisible: false,
         projectForm: {project_name: '', project_address: this.env}
       };
-
     },
 
 

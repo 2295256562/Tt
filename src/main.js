@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import ajaxRequest from '../src/api/ajaxRequest'
 
 Vue.config.productionTip = false;
 

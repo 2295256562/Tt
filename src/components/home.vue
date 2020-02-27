@@ -22,7 +22,7 @@
           <el-submenu index="/api">
             <template slot="title"><i class="iconfont icon-icon-menu-m0640 mar"></i><span> 接口测试</span></template>
             <el-menu-item index="2-1" class="iconfont icon-zhenduan mar_item">抓包管理</el-menu-item>
-            <el-menu-item index="/api/APITest" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>
+            <el-menu-item index="/api/APIlist" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>
             <el-menu-item index="2-3" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>
           </el-submenu>
 
@@ -98,6 +98,7 @@
       // 退出登陆
       logout() {
         localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         // localStorage.removeItem('user');
         this.$router.push({ name:'LoginPage' })
       }
@@ -128,6 +129,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap-reverse;
+
   }
 
   .content {
@@ -135,6 +137,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100%;
+    width: 100%
   }
 
   .user_tab {

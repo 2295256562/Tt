@@ -23,6 +23,7 @@
   }
   .productdiv {
     height: 100%;
-    padding: 20px 20px 0px 20px
+    padding: 20px 20px 0px 20px;
+    overflow: scroll;
   }
 </style>
