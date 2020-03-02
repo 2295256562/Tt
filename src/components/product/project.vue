@@ -16,7 +16,7 @@
         <span>项目名称:</span>
         <el-input v-model="projectName" size="small" style="width: 180px" placeholder="请输入内容"></el-input>
         <el-button type="primary" size="small" icon="el-icon-search" @click="seachbtn">搜索</el-button>
-        <el-button type="primary" size="small" icon="el-icon-search" @click="clearbtn">清空</el-button>
+        <el-button type="primary" size="small" icon="el-icon-delete" @click="clearbtn">清空</el-button>
         <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="AddProject">新增
         </el-button>
 
@@ -63,6 +63,7 @@
         <div style="margin-top: 10px;float:right">
           <el-pagination background layout="total, prev, pager, next" :total="total" :current-page.sync="handlepage" @current-change="handleCurrentChange"></el-pagination>
         </div>
+
       </div>
 
     </div>

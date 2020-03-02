@@ -60,3 +60,9 @@ export const addApiCase = params => { return $axios.post('addApiCase', params) }
 
 // 接口列表
 export const ListApicase = params => { return $axios.get('ListApicase?page=' + params) };
+
+// 接口搜索
+export const searchCase = params => {  return $axios.get('ListApicase/', { params }) };
+
+// 接口详情 apicase_info/{id}/
+export const apicase_info = params => { return $axios.get('apicase_info/' + params) };

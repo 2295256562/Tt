@@ -1,14 +1,11 @@
 <template>
-  <div class="api-list">
-    <!--列表区-->
-    <!--    <div class="api-left">-->
-    <!--      <div style="text-align: center;align-items: center; margin: 10px">-->
-    <!--        <el-input placeholder="请输入筛选条件" v-model="modeldata"></el-input>-->
-    <!--        <el-tree class="filter-tree" :data="modeldatas" :props="defaultProps" default-expand-all-->
-    <!--                 :filter-node-method="filterNode" ref="tree" style="padding-top: 10px">-->
-    <!--        </el-tree>-->
-    <!--      </div>-->
-    <!--    </div>-->
+  <div>
+    <div class="topdiv">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>接口测试</el-breadcrumb-item>
+        <el-breadcrumb-item>用例详情</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
 
     <!--表单区-->
     <div class="api-right">
@@ -18,19 +15,19 @@
           <el-divider content-position="left">基本信息</el-divider>
 
           <el-form-item label="用例名称" prop="case_name">
-            <el-input v-model="apiFrom.case_name" size="small" placeholder="请输入用例名称" style="width: 90%"></el-input>
+            <el-input v-model="apiFrom.case_name" size="small" placeholder="请输入用例名称" style="width: 88%"></el-input>
           </el-form-item>
 
           <div class="de-input">
             <span>所属项目:</span>
-            <el-select v-model="apiFrom.belongProject" filterable clearable placeholder="请选择所属项目" size="small"
+            <el-select v-model="apiFrom.project_id" filterable clearable placeholder="请选择所属项目" size="small"
                        style="padding-left: 10px;" @change="changeproject">
               <el-option v-for="item in BelongProjectList" :key="item.id" :label="item.project_name"
                          :value="item.id"></el-option>
             </el-select>
 
             <span style="padding-left: 10px">所属模块:</span>
-            <el-select v-model="apiFrom.belongModel" filterable clearable placeholder="请选择所属项目" size="small"
+            <el-select v-model="apiFrom.model" filterable clearable placeholder="请选择所属项目" size="small"
                        style="padding-left: 10px;">
               <el-option v-for="item in BelongModel" :key="item" :label="item"
                          :value="item">{{item}}
@@ -42,8 +39,8 @@
 
           <div class="de-input">
             <span>请求路径:</span>
-            <el-input placeholder="请输入内容" v-model="apiFrom.api_url" class="input-with-select" size="small">
-              <el-select v-model="apiFrom.api_method" slot="prepend" placeholder="请选择" style="width: 100px;">
+            <el-input placeholder="请输入内容" v-model="apiFrom.url" class="input-with-select" size="small">
+              <el-select v-model="apiFrom.method" slot="prepend" placeholder="请选择" style="width: 100px;">
                 <el-option label="GET" value="1"></el-option>
                 <el-option label="POST" value="2"></el-option>
                 <el-option label="PUT" value="3"></el-option>
@@ -52,10 +49,11 @@
             </el-input>
           </div>
 
+
           <div class="de-input">
             <span>参数类型:</span>
             <template>
-              <el-radio-group v-model="apiFrom.parameter_type">
+              <el-radio-group v-model="apiFrom.type">
                 <el-radio v-for="item in canUseMethods" :key="item.label" :label="item.label">{{ item.text }}</el-radio>
               </el-radio-group>
             </template>
@@ -64,19 +62,25 @@
           <div class="de-input" style="display: flex">
             <span>请求参数:</span>
             <div class="request" id="request-overflow">
-              <div class="request_params" style="margin: 10px">
-                <!--请求参数--->
-                <div v-for="(item, index) in Request_data" :key="index" style="margin: 5px 10px">
-                  <el-input v-model="item.key" placeholder="KEY" size="small"></el-input>
-                  <el-input style="width: 30%" v-model="item.value" size="small" placeholder="VALUE"></el-input>
-                  <el-input v-model="item.desc" placeholder="DESCRIPTION" size="small"></el-input>
-                  <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-                  <i @click="DelRequestParams(item.$index)" class="el-icon-remove-outline addParams"></i>
+              <template>
+                <div v-if="apiFrom.type === 2 ">
+                  <jsonEditor :value="paramsJson" :read-only="true"/>
                 </div>
-                <el-button @click="addRequestParams" type="primary" plain size="small"
-                           style="width: 94%; margin: 10px 0px 0px 10px">ADD
-                </el-button>
-              </div>
+
+                <div class="request_params" v-else style="margin: 10px">
+                  <!--请求参数--->
+                  <div v-for="(item, index) in Request_data" :key="index" style="margin: 5px 10px">
+                    <el-input v-model="item.key" placeholder="KEY" size="small"></el-input>
+                    <el-input style="width: 30%" v-model="item.value" size="small" placeholder="VALUE"></el-input>
+                    <el-input v-model="item.desc" placeholder="DESCRIPTION" size="small"></el-input>
+                    <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                    <i @click="DelRequestParams(item.$index)" class="el-icon-remove-outline addParams"></i>
+                  </div>
+                  <el-button @click="addRequestParams" type="primary" plain size="small"
+                             style="width: 94%; margin: 10px 0px 0px 10px">新增请求参数
+                  </el-button>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -88,7 +92,7 @@
             <div>
               <span>校验类型:</span>
               <template>
-                <el-radio-group v-model="apiFrom.aver">
+                <el-radio-group v-model="apiFrom.checkType">
                   <el-radio label="text_response">响应断言</el-radio>
                   <el-radio label="json_response">json断言</el-radio>
                 </el-radio-group>
@@ -97,18 +101,33 @@
             <!--校验值-->
             <div class="de-input" style="margin-top: 10px;display: flex">
               <span>检验值:</span>
-              <div style="width: 80%;padding-left: 22px;position: relative;font-size: 14px;float: left">
+              <div style="width: 80%;padding-left: 22px;position: relative;font-size: 14px;float: left"
+                   v-if="apiFrom.checkType === 'text_response'">
                 <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 100}" placeholder="请输入内容"
-                          v-model="apiFrom.averText"></el-input>
+                          v-model="apiFrom.checkText"></el-input>
+              </div>
+
+              <div v-else class="de-input request request_params" id="json-overflow" style="margin: 10px 0px 10px 20px">
+                <!--jsonpath断言--->
+                <div v-for="(item, index) in checkJsonData" :key="index"
+                     style="margin: 5px 10px; width: 100%; padding-left: 10px">
+                  <el-input v-model="item.key" placeholder="jsonpath表达式" size="small" style="width: 50%"></el-input>
+                  <el-input style="width: 30%" v-model="item.value" size="small" placeholder="校验值"></el-input>
+                  <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                  <i @click="DelCheckJsonPath(item.$index)" class="el-icon-remove-outline addParams"></i>
+                </div>
+                <el-button @click="AddCheckJsonPath" type="primary" plain size="small"
+                           style="width: 94%; margin: 10px 0px 0px 20px;">新增JSON断言
+                </el-button>
               </div>
             </div>
           </div>
-
 
           <el-form-item>
             <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="back">取消</el-button>
           </el-form-item>
+
         </div>
       </el-form>
     </div>
@@ -147,7 +166,7 @@
           </div>
           <div>
             <!--新增按钮 -->
-            <el-button size="mini" type="primary" style="width:100%;margin-top: 10px" @click="addHeaders">ADD HEADER
+            <el-button size="mini" type="primary" style="width:100%;margin-top: 10px" @click="addHeaders">新增请求头
             </el-button>
           </div>
 
@@ -161,10 +180,10 @@
       </el-dialog>
 
       <!--响应结果-->
-      <div style="margin-top: 20px;margin-left: 10px;height: 45%">
+      <div style="margin-top: 20px;margin-left: 10px;height: 40%">
         <p>响应结果:</p>
-        <div style="height:200px; width: 96%;margin-top: 5px; background-color: #9999FF">
-          <template style="height:200px; width: 96%;margin-top: 5px">
+        <div style="height:220px; width: 96%;margin-top: 5px; background-color: #9999FF">
+          <template style="height:200px; width: 96%;margin-top: 5px; overflow-y: auto">
             <json-view :data="json" :font-size="12"/>
           </template>
         </div>
@@ -180,16 +199,19 @@
 </template>
 
 <script>
-    import {sourceprojectList, sendInterfaces, allModel, addApiCase} from '../../api/api';
+    import {sourceprojectList, sendInterfaces, allModel, addApiCase, apicase_info} from '../../api/api';
     // import jsonView from '@/components/json-view';
-    import jsonView from 'vue-json-views'
+    import jsonView from 'vue-json-views';
+    import VJsoneditor from 'v-jsoneditor/src/index'
+    import jsonEditor from "../jsonEdit";
 
 
     export default {
 
         // 初始化方法
         created() {
-            this.sourceProjects()
+            this.sourceProjects();
+            this.GetCaseInfo();
         },
 
         data() {
@@ -197,9 +219,7 @@
                 modeldata: '',
                 defaultProps: '',
                 domain: '',
-                Request_data: [
-                    {key: '', value: '', desc: '', initiate: true}
-                ],
+
                 dialogVisible: false,
                 headerFilter: '',
                 HeadersList: [
@@ -215,13 +235,13 @@
                 ],
                 apiFrom: {
                     case_name: '',
-                    belongProject: '',
-                    belongModel: '',
-                    api_method: '1',
-                    api_url: '',
-                    parameter_type: 1,
-                    aver: 'text_response',
-                    averText: '',
+                    project_id: '',
+                    model: '',
+                    method: '1',
+                    url: '',
+                    type: 1,
+                    checkType: 'text_response',
+                    checkText: '',
                     params: this.Request_data,
                 },
                 rules: {
@@ -230,6 +250,12 @@
                 BelongProjectList: [],   // 所属项目
                 BelongModel: [], // 所属模块
                 json: {},
+                Reparams: this.paramsJson,
+                paramsJson: {},
+                Request_data: [
+                    {key: '', value: '', desc: '', initiate: true}
+                ],
+                checkJsonData: [{key: '', value: '', initiate: true}]
             }
         },
         watch: {
@@ -239,32 +265,34 @@
         },
 
         components: {
-            jsonView
+            jsonView,
+            VJsoneditor,
+            jsonEditor
         },
 
         computed: {
             canUseMethods() {
-                const {api_method} = this.apiFrom;
+                const {method} = this.apiFrom;
                 const GET = '1';
                 const POST = '2';
                 const PUT = '3';
                 const DELETE = '4';
 
-                if (api_method === GET) {
+                if (method === GET) {
                     return [{text: 'params', label: 1}]
                 }
-                if (api_method === POST) {
+                if (method === POST) {
                     return [{text: 'x-www-form-urlencoded', label: 1}, {text: 'json', label: 2}, {
                         text: 'form-data',
                         label: 3
                     }]
                 }
 
-                if (api_method === PUT) {
+                if (method === PUT) {
                     return [{text: 'params', label: 1}, {text: 'json', label: 2}]
                 }
 
-                if (api_method === DELETE) {
+                if (method === DELETE) {
                     return [{text: 'params', label: 1}, {text: 'json', label: 2}]
                 }
                 return []
@@ -299,9 +327,28 @@
 
             // 删除请求参数
             DelRequestParams(index) {
+                console.log(index)
                 this.Request_data.splice(index, 1);
                 if (this.Request_data.length === 0) {
                     this.Request_data.push({key: '', value: '', desc: '', initiate: true})
+                }
+            },
+
+            // 新增json断言
+            AddCheckJsonPath() {
+                this.checkJsonData.push(
+                    {key: '', value: '', initiate: true}
+                );
+                this.$nextTick(() => {
+                    this.HoldBot('json-overflow')
+                })
+            },
+
+            // 删除json断言
+            DelCheckJsonPath(index) {
+                this.checkJsonData.splice(index, 1);
+                if (this.checkJsonData.length === 0) {
+                    this.checkJsonData.push({key: '', value: '', initiate: true})
                 }
             },
 
@@ -344,14 +391,13 @@
                     project_id: this.apiFrom.belongProject,
                     model: this.apiFrom.belongModel,
                     method: this.apiFrom.api_method,
-                    url : this.apiFrom.api_url,
+                    url: this.apiFrom.api_url,
                     type: this.apiFrom.parameter_type,
                     checkType: this.apiFrom.aver,
                     checkText: this.apiFrom.averText,
                     params: this.Request_data,
                 };
-                console.log(obj);
-                addApiCase(obj).then(res=>{
+                addApiCase(obj).then(res => {
 
                 })
             },
@@ -385,31 +431,37 @@
             // 返回按钮
             back() {
                 this.$router.go(-1)
-            }
+            },
 
+            // 获取用例详情
+            GetCaseInfo() {
+                if (this.$route.query.id) {
+                    apicase_info(this.$route.query.id).then(res => {
+                        console.log(res.data.data);
+                        this.apiFrom = res.data.data;
+                        this.Request_data = res.data.data.params;
+                    })
+                } else {
+                    return
+                }
+            },
+
+            // json编辑器
+            onError() {
+                console.log('error')
+            }
         }
     }
 </script>
 
 <style scoped>
-  .api-list {
-    /*background-color: aqua;*/
-    height: 100%;
-    display: flex;
-  }
-
-  .api-left {
-    /*height: auto;*/
-    width: 12%;
-    float: left;
-    border-right: 0.5px solid #f3f6f8;
-  }
 
   .api-right {
     /*background-color: green;*/
     float: left;
     width: 78%;
     overflow: auto;
+    height: 80vh;
   }
 
   .apiDebug {
@@ -422,7 +474,7 @@
   .api-right > .el-form > .details {
     margin-left: 10px;
     margin-right: 20px;
-    margin-top: 80px;
+    margin-top: 20px;
 
   }
 
@@ -464,13 +516,14 @@
 
   .request {
     background-color: azure;
-    min-height: auto;
-    max-height: 300px;
+    min-height: 100px;
+    max-height: 280px;
     /*height: 300px;*/
     width: 80%;
     margin-left: 10px;
     float: left;
     /*overflow: auto;*/
+    overflow-y:auto
   }
 
   .aver-div {

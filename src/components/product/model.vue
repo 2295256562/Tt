@@ -13,7 +13,7 @@
           <span>模块名称:</span>
           <el-input v-model="modelName" size="small" style="width: 180px" placeholder="请输入内容"></el-input>
           <el-button type="primary" size="small" icon="el-icon-search" @click="searchModel">搜索</el-button>
-          <el-button type="primary" size="small" icon="el-icon-search" @click="clearModelBtn">清空</el-button>
+          <el-button type="primary" size="small" icon="el-icon-delete" @click="clearModelBtn">清空</el-button>
           <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="addModel">新增
           </el-button>
         </div>

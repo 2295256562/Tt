@@ -8,6 +8,7 @@ import Home from '@/components/home.vue'
 import Project from "@/components/product/project";
 import Model from "@/components/product/model";
 import APIlist from "../components/API/APIlist";
+import APIreport from  "../components/API/APIreport"
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -54,7 +55,8 @@ export default new Router({
       component: Home,
       children: [
         { path: 'APIlist', name: 'APIlist', component: APIlist },
-        {path: 'APITest', name: "APITest", component: APITest}
+        {path: '/APITest', name: "APITest", component: APITest},
+        {path: 'APIreport', name: "APIreport", component: APIreport},
       ]
     }
   ]
