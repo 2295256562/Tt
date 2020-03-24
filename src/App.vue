@@ -24,6 +24,10 @@
   .productdiv {
     height: 100%;
     padding: 20px 20px 0px 20px;
-    overflow: scroll;
+    /*overflow: scroll;*/
+  }
+
+  .tab {
+    height: 100%;
   }
 </style>

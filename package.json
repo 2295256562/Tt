@@ -16,10 +16,12 @@
     "element-ui": "^2.13.0",
     "jsonlint": "^1.6.3",
     "script-loader": "^0.7.2",
+    "sortablejs": "^1.10.2",
     "v-jsoneditor": "^1.2.3",
     "vue": "^2.5.2",
     "vue-json-views": "^1.1.0",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuedraggable": "^2.23.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

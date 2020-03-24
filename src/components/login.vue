@@ -32,8 +32,9 @@
       </div>
       <!--三方登陆-->
       <div style="display: flex">
-        <el-checkbox v-model="checked"  style="padding-left: 20px">记住密码</el-checkbox>
-        <div  style="text-align: right; padding-left: 50%" @click="forgetPassword">忘记密码?</div>
+        <div style="float: left">
+        <el-checkbox v-model="checked"  style="padding-left: 20px">记住密码</el-checkbox></div>
+        <div  style="margin-left: 55%" class="three"><span style="overflow: hidden;"  @click="ForgotPassword">忘记密码?</span></div>
       </div>
     </div>
   </div>
@@ -77,13 +78,13 @@
           // this.$message.success("登陆成功")
         }).catch(err => {
           console.log(err.data);
-          // this.$message.error(err.data.non_field_errors[0])
+          this.$message.error(err.data.non_field_errors[0])
         })
       },
 
       // 忘记密码
-      forgetPassword() {
-
+      ForgotPassword() {
+          alert('请联系管理员')
       }
     }
   }
@@ -105,5 +106,13 @@
     width: 420px;
     height: 46%;
     border-radius: 20px;
+  }
+</style>
+
+<style>
+  .three > span:hover {
+    /*background-color: #0079FE;*/
+    color: #409EFF;
+    cursor:pointer
   }
 </style>

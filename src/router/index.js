@@ -8,7 +8,11 @@ import Home from '@/components/home.vue'
 import Project from "@/components/product/project";
 import Model from "@/components/product/model";
 import APIlist from "../components/API/APIlist";
-import APIreport from  "../components/API/APIreport"
+import APIreport from  "../components/API/APIreport";
+import APIreportinfo from  "../components/API/reportinfo";
+import Headers from  "../components/API/project_headers";
+import taskList from "../components/task/taskList";
+import addTask from "../components/task/addTask";
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -57,7 +61,19 @@ export default new Router({
         { path: 'APIlist', name: 'APIlist', component: APIlist },
         {path: '/APITest', name: "APITest", component: APITest},
         {path: 'APIreport', name: "APIreport", component: APIreport},
+        {path: '/api/APIreport/info', name: "info", component: APIreportinfo},
+        {path: 'Headers', name: "Headers", component: Headers},
       ]
-    }
+    },
+    {
+      path: '/task',
+      name: 'Task',
+      component: Home,
+      children: [
+        {path: 'taskList', name: "taskList", component: taskList},
+        {path: 'addTask', name: "addTask", component: addTask},
+        // {path: 'model', name: "model", component: Model}
+      ]
+    },
   ]
 })

@@ -1,4 +1,5 @@
 import $axios from '../api/ajaxRequest'
+import qs from 'qs'
 
 
 //登陆
@@ -14,55 +15,119 @@ export const addProject = params => {
 
 // 项目列表
 export const projectList = params => {
-  return $axios({ method: 'get', url: '/project_list?page=' + params })
+  return $axios({method: 'get', url: '/project_list?page=' + params})
 };
 
 // 项目详情
 export const projectInfo = params => {
-  return $axios({ method: 'get', url: '/project_info/' + params })
+  return $axios({method: 'get', url: '/project_info/' + params})
 };
 
 // 项目删除
-export const  Delproject = params => {
-  return $axios({ method: 'delete', url: '/del/' + params })
+export const Delproject = params => {
+  return $axios({method: 'delete', url: '/del/' + params})
 };
 
 // 项目搜索
-export const seachProject = params => { return $axios({ method: 'get', url: '/project_list/?project_name=' + params}) };
+export const seachProject = params => {
+  return $axios({method: 'get', url: '/project_list/?search=' + params})
+};
 
 
 // 项目列表
-export const sourceprojectList = params => {return $axios({ method: 'get', url: '/ListProject'})};
+export const sourceprojectList = params => {
+  return $axios({method: 'get', url: '/ListProject'})
+};
 
 
 // 添加模块
-export const addModel = params => { return $axios({ method: 'post', url: 'AddModel', data: params }) };
+export const addModel = params => {
+  return $axios({method: 'post', url: 'AddModel', data: params})
+};
 
 // 模块列表
-export const modelList = params => { return $axios.get('modelList?page=' + params) };
+export const modelList = params => {
+  return $axios.get('modelList?page=' + params)
+};
 
 // 删除模块
-export const delModel = params => { return $axios.delete('delMod/' + params) };
+export const delModel = params => {
+  return $axios.delete('delMod/' + params)
+};
 
 // 模块详情
-export const modelInfo = params => { return $axios.get('modelInfo/' + params) };
+export const modelInfo = params => {
+  return $axios.get('modelInfo/' + params)
+};
 
 
 // 调试接口用例
-export const sendInterfaces = params => { return $axios.post( 'send/', params) };
+export const sendInterfaces = params => {
+  return $axios.post('send/', params)
+};
 
 // 通过项目id查询所有模块
-export const allModel = params => { return $axios.get('allModel/' + params ) };
+export const allModel = params => {
+  return $axios.get('allModel/' + params)
+};
 
 
 // 接口测试用例保存
-export const addApiCase = params => { return $axios.post('addApiCase', params) };
+export const addApiCase = params => {
+  return $axios.post('addApiCase', params)
+};
 
 // 接口列表
-export const ListApicase = params => { return $axios.get('ListApicase?page=' + params) };
+export const ListApicase = params => {
+  return $axios.get('ListApicase?page=' + params)
+};
 
-// 接口搜索
-export const searchCase = params => {  return $axios.get('ListApicase/', { params }) };
+// 接口用例搜索
+export const searchCase = params => {
+  return $axios.get('ListApicase/', {params})
+};
 
-// 接口详情 apicase_info/{id}/
-export const apicase_info = params => { return $axios.get('apicase_info/' + params) };
+// 接口用例详情 apicase_info/{id}/
+export const apicase_info = params => {
+  return $axios.get('apicase_info/' + params)
+};
+
+// 接口用例多选
+export const listAPiInter = params => {
+  return $axios.get('caselist/', {
+    params: {id: params}, paramsSerializer: params => {
+      return qs.stringify(params, {indices: false})
+    }
+  })
+};
+
+// 执行测试任务接口
+export const testTask = params => { return $axios.post('testTask/', params) };
+
+// 用例搜索接口
+export const search = params => { return $axios.get('ListApicase/?search='+ params)  };
+
+// 接口用例修改
+export const updateCase = params => { return $axios.put('updateCase/' + id, params,) };
+
+
+// 请求头列表
+export const headerslist = params => { return $axios.get('headerslist/page=' + params) };
+
+// 请求头详情
+export const headersinfo = params => { return $axios.get('headersinfo/'+ params) };
+
+
+// 报告列表
+export const reportlist = params => { return $axios.get('ReportList?page='+params) };
+
+// 报告详情
+export const reportinfo = params => { return $axios.get('Reportinfo/'+ params) };
+
+
+
+// 添加定时任务
+export const addTimeTask = params => { return $axios.post('addTimeTask/', params) };
+
+// 定时任务列表
+export const TimeTaskList = params => { return $axios.get('TimeTaskList?page='+params) };
