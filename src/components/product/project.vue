@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 85%">
 
     <div class="topdiv">
       <el-breadcrumb separator-class="el-icon-arrow-right">

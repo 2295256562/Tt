@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 85%">
     <div class="topdiv">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>项目管理</el-breadcrumb-item>
@@ -207,7 +207,7 @@
                 modelInfo(row.id).then(res => {
                     console.log(res.data.data, '22222222');
                     this.modelform = res.data.data;
-                    this.modelform.project_name = res.data.data.project_name;
+                    this.modelform.project_id = res.data.data.project_name;
                     // console.log(res.data.data.model_name.split(','))
                     this.modelform.model_name = res.data.data.model_name.split(',')
 

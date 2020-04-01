@@ -6,7 +6,7 @@
       <div class="left_c">
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo"
                  background-color="#001529" text-color="white"
-                 style="font-size: 14px;font-family: 'Arial Normal', 'Arial';" @select="routeTo"
+                 style="font-size: 14px; font-family: 'Arial Normal', 'Arial';" @select="routeTo"
                  @open="handleOpen" @close="handleClose">
 
           <el-menu-item index="/index"><i class="iconfont icon-kanban mar"></i><span slot="title">项目数据</span></el-menu-item>

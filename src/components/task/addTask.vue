@@ -8,7 +8,7 @@
       </el-breadcrumb>
     </div>
 
-    <div style="width: 40%;position:absolute;  left:30%; top:20%;overflow-y: auto; height:550px">
+    <div style="width: 40%;position:absolute;  left:30%; top:20%;overflow-y: auto; height:70%">
       <el-form ref="form" :model="taskForm" label-width="80px">
         <el-form-item label="任务名称:">
           <el-input v-model="taskForm.name" placeholder="请输入任务名称"></el-input>
@@ -61,6 +61,10 @@
         <el-form-item label="用例设置:">
           <el-transfer :titles="['测试用例', '任务用例']" v-model="taskForm.caseList" :data="caseList"></el-transfer>
         </el-form-item>
+
+        <el-form-item label="是否启用:">
+          <el-switch v-model="taskForm.enabled"></el-switch>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addTask">保存</el-button>
           <el-button @click="revert">取消</el-button>
@@ -72,18 +76,18 @@
 </template>
 
 <script>
-    import {sourceprojectList, projectInfo, searchCase, addTimeTask} from '../../api/api'
+    import {sourceprojectList, projectInfo, searchCase, addTimeTask, TaskInfo,} from '../../api/api'
 
     export default {
 
         // 初始化方法
         created() {
             this.SoureceProject();
+            this.GTaskinfo();
         },
         data() {
 
             return {
-
                 // 表单内容
                 taskForm: {
                     name: '',
@@ -93,7 +97,8 @@
                     time: '',
                     env: '',
                     caseList: [],
-                    week: ''
+                    week: '',
+                    enabled: true
                 },
                 // 项目名称
                 projectList: [],
@@ -108,7 +113,6 @@
                 ],
                 ENVList: [],
                 caseList: [],
-                // caseS: "",
             }
         },
         methods: {
@@ -120,6 +124,7 @@
                 })
             },
 
+            // 根据项目查用例
             changeEnv(selVal) {
                 // 根据项目id查询项目设置的环境
                 projectInfo(selVal).then(res => {
@@ -140,38 +145,90 @@
                 });
             },
 
+            // 新增定时任务事件
             addTask() {
                 // console.log(this.taskForm.caseList);
                 const arr = this.taskForm.caseList;
-                let  str = [];
+                let str = [];
                 str = arr.map(item => item).sort();
                 console.log(str);
 
                 const obj = {
-                    name : this.taskForm.name,
+                    name: this.taskForm.name,
                     project: this.taskForm.project,
                     desc: this.taskForm.desc,
-                    task :this.taskForm.task,
+                    task: this.taskForm.task,
                     time: this.taskForm.time,
                     env: this.taskForm.env,
-                    caseList : str,
+                    caseList: str,
                     week: this.taskForm.week,
                     envname: this.ENVList
+                };
+                console.log(this.taskForm.time);
+                return;
+
+                // 当query.id不等于空的时候走修改接口
+                if (this.$route.query.id) {
+                    return
+                } else {
+                    addTimeTask(obj).then(res => {
+                        // console.log(res.data.data )
+                        if (res.data.code === '000000') {
+                            this.$router.push({path: 'taskList'});
+                            this.$message.success("任务添加成功")
+                        } else {
+                            this.$message.info(res.data.data)
+                        }
+                    })
                 }
-                addTimeTask(obj).then(res =>{
-                    // console.log(res.data.data )
-                    if (res.data.code === '000000'){
-                        this.$router.push({path: 'taskList'})
-                        this.$message.success("任务添加成功")
-                    }else {
-                        this.$message.info(res.data.data)
-                    }
-                })
+
             },
 
+            // 取消按钮事件
             revert() {
                 this.$router.go(-1)
-            }
+            },
+
+            // 通过id获取case详情
+            GTaskinfo() {
+                if (this.$route.query.id) {
+                    TaskInfo(this.$route.query.id).then(res => {
+                        console.log(res.data.data);
+                        this.taskForm = res.data.data;
+                        this.taskForm.desc = res.data.data.description;
+                        this.taskForm.project = res.data.data.args[2];
+                        this.taskForm.caseList = res.data.data.args[1];
+                        const env = res.data.data.args[3];
+                        const projectid = res.data.data.args[2];
+
+                        // 判断定时任务
+                        if (res.data.data.crontab.day_of_week === "*"
+                            && res.data.data.crontab.day_of_month === "*"
+                            && res.data.data.crontab.month_of_year === "*") {
+                            this.taskForm.task = "每天";
+                            this.taskForm.time = res.data.data.crontab.hour+ ":" + res.data.data.crontab.minute
+                        }
+
+                        projectInfo(projectid).then(res => {
+                            this.ENVList = res.data.data.project_address;
+                            this.taskForm.project = res.data.data.project_name;
+                            this.taskForm.env = env
+                        });
+
+                        const obj = {
+                            project_id: projectid
+                        };
+                        searchCase(obj).then(res => {
+                            res.data.data.results.forEach(item => {
+                                this.caseList.push({
+                                    key: item.id,
+                                    label: item.case_name,
+                                })
+                            });
+                        });
+                    })
+                }
+            },
         }
     }
 </script>

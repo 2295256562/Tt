@@ -20,7 +20,7 @@
 
           <el-form-item label="所属项目">
             <el-select v-model="apiFrom.project_id" filterable clearable placeholder="请选择所属项目" size="small"
-                       style="padding-left: 10px;" @change="changeproject">
+                        @change="changeproject">
               <el-option v-for="item in BelongProjectList" :key="item.id" :label="item.project_name"
                          :value="item.id"></el-option>
             </el-select>
@@ -64,20 +64,20 @@
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="请求参数" style="width: 88%">
+          <el-form-item label="请求参数">
             <template>
               <div v-if="apiFrom.type === 2 ">
                 <jsonEditor ref="editor" :value="paramsJson" :read-only="true"/>
               </div>
 
-              <div class="de-input request request_params" v-else style="width: 100%">
+              <div class="de-input request request_params" v-else >
                 <!--请求参数--->
                 <div v-for="(item, index) in Request_data" :key="index"
-                     style="margin: 5px 10px;width: 100%; padding-left: 10px">
+                     style="margin: 5px 10px; padding-left: 10px">
                   <el-input v-model="item.key" placeholder="KEY" size="small" style="width: 28%"></el-input>
                   <el-input style="width: 30%" v-model="item.value" size="small" placeholder="VALUE"></el-input>
                   <el-input v-model="item.desc" placeholder="DESCRIPTION" size="small" style="width: 25%"></el-input>
-                  <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                  <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949" style="padding-left: 7%"></el-switch>
                   <i @click="DelRequestParams(index)" class="el-icon-remove-outline addParams"></i>
                 </div>
                 <el-button @click="addRequestParams" type="primary" plain size="small"
@@ -148,7 +148,7 @@
       <el-button type="text" @click="dialogVisible = true" style="margin-left: 10px">请求头设置</el-button>
       <el-dialog title="请求头设置" :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
         <span>请求头:</span>
-        <el-input v-model="headerFilter" placeholder="请输入筛选条件" style="width:30%"></el-input>
+        <el-input v-model="headerFilter" placeholder="请输入项目名称" size="small" style="width:30%"  @keyup.enter.native="filterHeader"></el-input>
 
         <div class="headerSet" id="headersID">
           <div v-for="(item, index) in HeadersList" :key="index" style="margin-top: 10px">
@@ -184,7 +184,7 @@
       <!--响应结果-->
       <div style="margin-top: 20px;margin-left: 10px;margin-right: 10px;height: 40%; ">
         <p>响应结果:</p>
-        <div style="height:220px; width: 100%;margin-top: 5px;">
+        <div style="height:100%; width: 100%;margin-top: 5px;">
           <!--        <template style="height:200px; width: 96%;margin-top: 5px; overflow-y: auto">-->
           <json-view :data="json" theme="one-dark" style="height: 100%;overflow: auto"/>
 
@@ -193,9 +193,9 @@
       </div>
 
       <!--校验结果-->
-      <div style="margin-top: 20px;margin-left: 10px">
+      <div style="margin-top: 120px;margin-left: 10px;height:24%">
         <p>校验结果:</p>
-        <div style="height: 180px;width: 96%;background-color: burlywood;margin-top: 10px"></div>
+        <div style="height: 100%;width: 96%;background-color: burlywood;margin-top: 10px"></div>
       </div>
     </div>
   </div>
@@ -203,7 +203,7 @@
 </template>
 
 <script>
-    import {sourceprojectList, sendInterfaces, allModel, addApiCase, apicase_info, search, updateCase} from '../../api/api';
+    import {sourceprojectList, sendInterfaces, allModel, addApiCase, apicase_info, search, updateCase, filterHeader} from '../../api/api';
     // import jsonView from '@/components/json-view';
     import jsonView from 'vue-json-views';
     import VJsoneditor from 'v-jsoneditor/src/index'
@@ -516,6 +516,15 @@
                 console.log(item)
             },
 
+            // 筛选请求头
+            filterHeader() {
+                filterHeader(this.headerFilter).then(res => {
+                    // console.log(JSON.parse(res.data.data.results))
+                    this.HeadersList = res.data.data.results[0].headers
+                })
+            }
+
+
         }
     }
 </script>
@@ -534,7 +543,7 @@
     background-color: antiquewhite;
     float: left;
     width: 28%;
-    height: 80vh;
+    height: 100%;
   }
 
   .api-right > .el-form > .details {
@@ -585,8 +594,8 @@
     min-height: 100px;
     max-height: 280px;
     /*height: 300px;*/
-    width: 80%;
-    margin-left: 10px;
+    width: 88%;
+    /*margin-left: 10px;*/
     float: left;
     /*overflow: auto;*/
     overflow-y: auto

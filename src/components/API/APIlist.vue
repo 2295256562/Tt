@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 85%">
     <div class="topdiv">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>接口测试</el-breadcrumb-item>
@@ -31,21 +31,21 @@
         <!--表格-->
         <el-table :data="apicaseData"  border style="width: 100%; height: 90%" size="small"
                   @selection-change="selsChange" ref="table">
-          <el-table-column fixed type="selection" size="small" width="55"></el-table-column>
-          <el-table-column prop="case_name" width="200" size="small" label="用例名称" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="project_name" label="所属项目" width="160" size="small"></el-table-column>
-          <el-table-column prop="model" label="所属模块" width="160" size="small"></el-table-column>
-          <el-table-column prop="url" width="240" label="用例url" size="small"></el-table-column>
-          <el-table-column prop="method" label="请求类型" width="80" size="small">
-            <template slot-scope="scope" size="small">
+          <el-table-column fixed type="selection"  width="55"></el-table-column>
+          <el-table-column prop="case_name" width="200"  label="用例名称" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="project_name" label="所属项目" width="160" ></el-table-column>
+          <el-table-column prop="model" label="所属模块" width="160" ></el-table-column>
+          <el-table-column prop="url" width="240" label="用例url" ></el-table-column>
+          <el-table-column prop="method" label="请求类型" width="80" >
+            <template slot-scope="scope" >
                 <el-tag v-if="scope.row.method==='1'" effect="dark" type="success">GET</el-tag>
                 <el-tag v-else-if="scope.row.method==='2'" effect="dark" type="danger">POST</el-tag>
                 <el-tag v-else-if="scope.row.method==='3'" effect="dark" type="warning">PUT</el-tag>
                 <el-tag v-else effect="dark" type="info">PUT</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="params" width="400" label="请求参数" size="small" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="checkText" width="400" label="校验参数" size="small" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="params" width="400" label="请求参数"  :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="checkText" width="400" label="校验参数" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
 <!--              <el-button @click="handleClick(scope.row)" type="text" size="small">测试</el-button>-->

@@ -101,6 +101,9 @@ export const listAPiInter = params => {
   })
 };
 
+// 搜索请求头
+export const filterHeader = params => { return $axios.get('Filterheader/?project_name='+params) };
+
 // 执行测试任务接口
 export const testTask = params => { return $axios.post('testTask/', params) };
 
@@ -124,6 +127,8 @@ export const reportlist = params => { return $axios.get('ReportList?page='+param
 // 报告详情
 export const reportinfo = params => { return $axios.get('Reportinfo/'+ params) };
 
+//报告case详情
+export const caseReport = params => { return $axios.get('caseReport/?case_report=' + params ) };
 
 
 // 添加定时任务
@@ -131,3 +136,6 @@ export const addTimeTask = params => { return $axios.post('addTimeTask/', params
 
 // 定时任务列表
 export const TimeTaskList = params => { return $axios.get('TimeTaskList?page='+params) };
+
+// 任务详情
+export const TaskInfo = params => { return $axios.get('TaskInfo/'+ params) };
