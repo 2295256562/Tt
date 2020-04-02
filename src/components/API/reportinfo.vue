@@ -68,7 +68,7 @@
                       </div>
                     </div>
                   </el-tab-pane>
-                  <el-tab-pane label="执行日志" name="third">角色管理</el-tab-pane>
+                  <el-tab-pane label="执行日志" name="third"></el-tab-pane>
                 </el-tabs>
               </template>
               <!--              <template slot-scope="props">-->
@@ -178,16 +178,17 @@
         },
 
         computed: {
-            resultSampleJson: function () {
-                console.log(row.case_headers, 11111,)
-                try {
-                    let objs = JSON.parse(this.tableData[0].case_headers);
-                    return JSON.stringify(objs, null, 4);
-                } catch (error) {
-                    return this.resultSample;
-                }
+            // resultSampleJson: function () {
+            //     console.log(row.case_headers, 11111,)
+            //     try {
+            //         let objs = JSON.parse(this.tableData[0].case_headers);
+            //         return JSON.stringify(objs, null, 4);
+            //     } catch (error) {
+            //         return this.resultSample;
+            //     }
+            //
+            // },
 
-            }
 
         },
     }

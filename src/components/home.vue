@@ -9,7 +9,8 @@
                  style="font-size: 14px; font-family: 'Arial Normal', 'Arial';" @select="routeTo"
                  @open="handleOpen" @close="handleClose">
 
-          <el-menu-item index="/index"><i class="iconfont icon-kanban mar"></i><span slot="title">项目数据</span></el-menu-item>
+          <el-menu-item index="/index"><i class="iconfont icon-kanban mar"></i><span slot="title">项目数据</span>
+          </el-menu-item>
 
           <!--项目管理-->
           <el-submenu index="/product">
@@ -47,8 +48,8 @@
           <el-submenu index="/task">
             <template slot="title"><i class="iconfont icon-renwuguanli mar"></i><span>任务管理</span></template>
             <el-menu-item index="/task/Tasklist" class="iconfont icon-dingshirenwu1 mar_item">定时任务</el-menu-item>
-<!--            <el-menu-item index="/api/APIlist" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>-->
-<!--            <el-menu-item index="/api/APIreport" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>-->
+            <!--            <el-menu-item index="/api/APIlist" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>-->
+            <!--            <el-menu-item index="/api/APIreport" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>-->
           </el-submenu>
         </el-menu>
       </div>
@@ -61,14 +62,18 @@
           <div class="user_info">
             <!--用户信息-->
             <div class="a">
-              <el-menu class="el-menu-demo" mode="horizontal" background-color="rgba(55, 61, 65, 1)" menu-trigger="click">
+              <el-menu class="el-menu-demo" mode="horizontal" background-color="rgba(55, 61, 65, 1)"
+                       menu-trigger="click">
                 <el-submenu index="2">
-                  <template slot="title"> admin</template>
-                  <el-menu-item index="2-1" >修改密码</el-menu-item>
-                  <el-menu-item >基本信息</el-menu-item>
+                  <template slot="title">
+                    <i class="iconfont icon-touxiang-copy"  style="font-size: 32px"></i>
+                    {{user}}
+                  </template>
+                  <el-menu-item index="2-1">修改密码</el-menu-item>
+                  <el-menu-item>基本信息</el-menu-item>
                 </el-submenu>
                 <el-menu-item class="el-icon-message-solid"></el-menu-item>
-                <el-menu-item class="iconfont icon-signOut" @click="logout"></el-menu-item>
+                <el-menu-item class="iconfont icon-signOut" @click="logout">退出登陆</el-menu-item>
               </el-menu>
             </div>
           </div>
@@ -87,31 +92,33 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
+    export default {
+        data() {
+            return {
+                user: localStorage.user
+            }
+        },
+        methods: {
+            routeTo(key, path) {
+                if (this.$route.path === key)
+                    return;
+                this.$router.push({path: key})
+            },
+            handleOpen() {
+            },
+            handleClose() {
+            },
 
-      }
-    },
-    methods: {
-      routeTo(key, path) {
-        if (this.$route.path === key)
-          return;
-        this.$router.push({path: key})
-      },
-      handleOpen (){},
-      handleClose(){},
 
-
-      // 退出登陆
-      logout() {
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
-        // localStorage.removeItem('user');
-        this.$router.push({ name:'LoginPage' })
-      }
+            // 退出登陆
+            logout() {
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                // localStorage.removeItem('user');
+                this.$router.push({name: 'LoginPage'})
+            }
+        }
     }
-  }
 </script>
 
 <style scoped>

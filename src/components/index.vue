@@ -128,6 +128,6 @@ import G2 from '@antv/g2';
     width: auto;
     height: 78%;
     /*background-color: #999999;*/
-    border: 0.5px solid #666666;
+    /*border: 0.5px solid #666666;*/
   }
 </style>
