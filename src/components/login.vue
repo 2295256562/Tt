@@ -2,7 +2,6 @@
   <div class="page_state">
     <div class="login">
       <div style="padding-top: 20px">
-        <!-- <img src="http://www.axshare.cn/gsc/K7I9OT/bd/8f/65/bd8f65cd420c439a840ff7f82d6c32fd/images/登录界面/u986.svg?token=79591caae54d0def9744c4f6e6f8b901b7179964cdcc28500a46e2d0d7c356ed"> -->
       </div>
 
 
@@ -27,67 +26,85 @@
             <el-button type="primary" @click="loginHandler('Loginform')"
                        style="margin-left: -80px;width: 380px;height: 50px">登陆
             </el-button>
+            <el-button type="" @click="RegHandler"
+                       style="margin-left: -80px;width: 380px;height: 50px; margin-top: 6px">注册账号
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
       <!--三方登陆-->
       <div style="display: flex">
         <div style="float: left">
-        <el-checkbox v-model="checked"  style="padding-left: 20px">记住密码</el-checkbox></div>
-        <div  style="margin-left: 55%" class="three"><span style="overflow: hidden;"  @click="ForgotPassword">忘记密码?</span></div>
+          <el-checkbox v-model="checked" style="padding-left: 20px">记住密码</el-checkbox>
+        </div>
+        <div style="margin-left: 55%" class="three">
+          <span style="overflow: hidden;" @click="ForgotPassword">忘记密码?</span>
+        </div>
+
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
-  import {login} from "../api/api";
+    import {login} from "../api/api";
 
-  export default {
-    data() {
-      return {
-        labelPosition: 'left',
-        Loginform: {
-          username: '',
-          password: '',
+    export default {
+        data() {
+            return {
+                labelPosition: 'left',
+                Loginform: {
+                    username: '',
+                    password: '',
+                },
+                checkLoginform: {
+                    username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+                    password: [{required: true, message: '请输入密码', trigger: 'blur'}],
+                },
+                checked: false
+            }
         },
-        checkLoginform: {
-          username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-          password: [{required: true, message: '请输入密码', trigger: 'blur'}],
-        },
-        checked: false
-      }
-    },
-    methods: {
-      loginHandler() {
-        login(this.Loginform).then(res => {
-          // console.log(res.data.token);
-          //判断用户是否点击记住密码
-          if (this.checked){
-            // 记住密码
-            localStorage.token =  res.data.token;
-            sessionStorage.token = null;
-          }else {
-            //没记住密码
-            sessionStorage.token = res.data.token;
-            localStorage.token = null;
-          }
-          //跳转
-          this.$message.success(this.Loginform.username + "：登陆成功")
-          this.$router.push({name: 'Index'});
-          // this.$message.success("登陆成功")
-        }).catch(err => {
-          console.log(err.data);
-          this.$message.error(err.data.non_field_errors[0])
-        })
-      },
+        methods: {
 
-      // 忘记密码
-      ForgotPassword() {
-          alert('请联系管理员')
-      }
+            //登陆
+            loginHandler() {
+                login(this.Loginform).then(res => {
+                    // console.log(res.data.token);
+                    //判断用户是否点击记住密码
+                    if (this.checked) {
+                        // 记住密码
+                        localStorage.token = res.data.token;
+                        sessionStorage.token = null;
+                    } else {
+                        //没记住密码
+                        sessionStorage.token = res.data.token;
+                        localStorage.token = null;
+                        localStorage.user = res.data.username;
+                    }
+                    //跳转
+                    this.$message.success(this.Loginform.username + "：登陆成功")
+                    this.$router.push({name: 'Index'});
+                    // this.$message.success("登陆成功")
+                }).catch(err => {
+                    console.log(err.data);
+                    this.$message.error(err.data.non_field_errors[0])
+                })
+            },
+
+            // 忘记密码
+            ForgotPassword() {
+                alert('请联系管理员')
+            },
+
+            // 注册
+            RegHandler() {
+                this.$router.push({
+                    path: 'register',
+                })
+            },
+        }
     }
-  }
 </script>
 
 <style scoped>
@@ -113,6 +130,6 @@
   .three > span:hover {
     /*background-color: #0079FE;*/
     color: #409EFF;
-    cursor:pointer
+    cursor: pointer
   }
 </style>

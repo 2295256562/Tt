@@ -8,6 +8,11 @@ export const login = params => {
   return $axios({method: 'post', url: '/login/', data: params})
 };
 
+// 注册
+export const register = params => {
+  return $axios.post('reg/', params)
+};
+
 // 添加项目
 export const addProject = params => {
   return $axios({method: 'post', url: 'add_project/', data: params})

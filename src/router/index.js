@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from '@/components/login.vue'
+import Register from '@/components/register.vue'
 import Index from '@/components/index.vue'
 import PhoneCloud from '@/components/APP/phonecloud'
 import APITest from '@/components/API/API'
@@ -26,6 +27,11 @@ export default new Router({
       path: '/login',
       name: 'LoginPage',
       component: LoginPage
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/',
