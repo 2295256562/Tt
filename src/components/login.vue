@@ -70,7 +70,7 @@
             //登陆
             loginHandler() {
                 login(this.Loginform).then(res => {
-                    // console.log(res.data.token);
+                    console.log(res.data);
                     //判断用户是否点击记住密码
                     if (this.checked) {
                         // 记住密码
@@ -88,7 +88,7 @@
                     // this.$message.success("登陆成功")
                 }).catch(err => {
                     console.log(err.data);
-                    this.$message.error(err.data.non_field_errors[0])
+                    this.$message.error(err.data.non_field_errors)
                 })
             },
 
@@ -121,7 +121,7 @@
     background-color: rgba(255, 255, 255, 1);
     text-align: center;
     width: 420px;
-    height: 46%;
+    height: 50%;
     border-radius: 20px;
   }
 </style>

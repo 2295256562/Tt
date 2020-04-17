@@ -15,6 +15,7 @@
         <div class="data-text">项目总数</div>
         <div>
           <i class="iconfont icon-xiangmu2 size"></i>
+          <span>{{project}}</span>
         </div>
 
       </div>
@@ -24,13 +25,14 @@
         <div class="data-text">定时任务总数</div>
         <div>
           <i class="iconfont icon-dingshirenwu size"></i>
+          <span>{{TimerTask}}</span>
         </div>
 
       </div>
 
       <!--即时任务-->
       <div class="data-div">
-        <div class="data-text">即时任务</div>
+        <div class="data-text">以构建次数</div>
         <div>
           <i class="iconfont icon-renwu size"></i>
         </div>
@@ -44,11 +46,18 @@
 
 <script>
     import G2 from '@antv/g2';
+    import {Datareport} from '../api/api'
 
     export default {
+        created() {
+            this.DataReport()
+        },
         data() {
             return {
-                caseNumber: 11
+                caseNumber: 0,
+                project: 0,
+                TimerTask: 0,
+                data: []
             }
         },
         mounted() {
@@ -56,17 +65,26 @@
         },
         methods: {
             drawCart() {
-                const data = [
-                    {year: '1991', value: 3},
-                    {year: '1992', value: 4},
-                    {year: '1993', value: 3.5},
-                    {year: '1994', value: 5},
-                    {year: '1995', value: 4.9},
-                    {year: '1996', value: 6},
-                    {year: '1997', value: 7},
-                    {year: '1998', value: 9},
-                    {year: '1999', value: 13}
-                ];
+                const data = [{
+                "create_time": "2020-02-27",
+                "count": 1
+            },
+            {
+                "create_time": "2020-03-03",
+                "count": 2
+            },
+            {
+                "create_time": "2020-03-09",
+                "count": 2
+            },
+            {
+                "create_time": "2020-03-10",
+                "count": 1
+            },
+            {
+                "create_time": "2020-03-26",
+                "count": 2
+            }];
                 const chart = new G2.Chart({
                     container: 'c1',
                     forceFit: true,
@@ -74,19 +92,22 @@
                     width: 88
                 });
                 chart.source(data);
-                chart.scale('value', {
-                    min: 0
-                });
-                chart.scale('year', {
-                    range: [0, 1]
+                chart.scale({
+                    create_time: {
+                        range: [0, 1],
+                    },
+                    count: {
+                        min: 0,
+                        max: 20,
+                        tickInterval: 2,
+                    },
                 });
                 chart.tooltip({
-                    crosshairs: {
-                        type: 'line'
-                    }
+                    showCrosshairs: true, // 展示 Tooltip 辅助线
+                    shared: true,
                 });
-                chart.line().position('year*value');
-                chart.point().position('year*value')
+                chart.line().position('create_time*count').label('count');
+                chart.point().position('create_time*count')
                     .size(4)
                     .shape('circle')
                     .style({
@@ -94,6 +115,15 @@
                         lineWidth: 1
                     });
                 chart.render();
+            },
+
+            DataReport() {
+                Datareport().then(res => {
+                    this.caseNumber = res.data.data.CASESUM;
+                    this.project = res.data.data.PROJECTSUM;
+                    this.TimerTask = res.data.data.TimerTask;
+                    this.data = res.data.data.RECENTLYADDCASE
+                })
             }
         }
     }

@@ -8,9 +8,8 @@
       </el-breadcrumb>
     </div>
 
-
-    <div class="header">
-      <div style="width: 60%" class="mar">
+    <div class="header" style="display: flex">
+      <div style="width: 60%; float: left" class="mar">
         <div>任务编号: {{TaskNo}}</div>
         <div>开始时间: {{R_StartTime}}</div>
         <div>结束时间: {{R_EndTime}}</div>
@@ -18,6 +17,8 @@
           style="color: #52c41a;font-size: 16px">成功</span> {{R_CaseFail}}<span
           style="color: red;font-size: 16px">失败</span></div>
       </div>
+      <div class="report" id="c2"></div>
+
     </div>
 
 
@@ -25,7 +26,7 @@
       <div class="taskResult">
         <div style="height: 20px;padding-left: 40px;line-height: 40px;">任务结果</div>
         <el-divider></el-divider>
-        <div style="overflow-y: auto; height: 62vh;">
+        <div style="overflow-y: auto; height: 540px;">
           <el-table :data="tableData" style="width: 100%" size="small" :row-class-name="tableRowClassName">
             <el-table-column type="expand">
               <template slot-scope="props">
@@ -35,17 +36,20 @@
                   <span style="padding-left: 4px">{{ props.row.case_url }}</span>
                 </div>
 
-                <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" style="height: 400px">
+                <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick"
+                         style="height: 400px;overflow:auto">
                   <el-tab-pane label="请求参数" name="first">
                     <div style="display: flex">
                       <div style=" width: 46%; height: 328px; border: Window 1px solid; float: left">
-                        <div style="border-bottom: Window solid 1px; height: 36px;text-align: center;    line-height: 36px">
+                        <div
+                          style="border-bottom: Window solid 1px; height: 36px;text-align: center;    line-height: 36px">
                           请求Headers
                         </div>
                         <json-view :data="props.row.case_headers" style="height: 100%;overflow: auto"/>
                       </div>
                       <div style=" width: 46%; height: 328px; border: Window 1px solid; margin-left: 10%">
-                        <div style="border-bottom: Window solid 1px; height: 36px;text-align: center;    line-height: 36px">
+                        <div
+                          style="border-bottom: Window solid 1px; height: 36px;text-align: center;    line-height: 36px">
                           请求参数
                         </div>
                         <json-view :data="props.row.case_params" style="height: 100%;overflow: auto"/>
@@ -68,37 +72,15 @@
                       </div>
                     </div>
                   </el-tab-pane>
-                  <el-tab-pane label="执行日志" name="third"></el-tab-pane>
+                  <el-tab-pane label="执行日志" name="third">
+                    <div class="text-wrapper">{{props.row.case_log}}</div>
+                  </el-tab-pane>
                 </el-tabs>
               </template>
-              <!--              <template slot-scope="props">-->
-              <!--                <el-form label-position="left" inline class="demo-table-expand">-->
-              <!--                  <el-form-item label="用例名称">-->
-              <!--                    <span>{{ props.row.case_name }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                  <el-form-item label="用例url">-->
-              <!--                    <span>{{ props.row.url }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                  <el-form-item label="请求方式">-->
-              <!--                    <span>{{ props.row.method }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                  <el-form-item label="店铺 ID">-->
-              <!--                    <span>{{ props.row.shopId }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                  <el-form-item label="商品分类">-->
-              <!--                    <span>{{ props.row.category }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                  <el-form-item label="店铺地址">-->
-              <!--                    <span>{{ props.row.address }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                  <el-form-item label="商品描述">-->
-              <!--                    <span>{{ props.row.desc }}</span>-->
-              <!--                  </el-form-item>-->
-              <!--                </el-form>-->
-              <!--              </template>-->
             </el-table-column>
             <el-table-column label="" prop="case_name" size="small"></el-table-column>
           </el-table>
+
         </div>
 
       </div>
@@ -108,9 +90,11 @@
 </template>
 
 <script>
-    import {reportinfo, listAPiInter, caseReport} from '../../api/api'
+    import {reportinfo, caseReport} from '../../api/api'
     import jsonEditor from "../jsonEdit";
     import jsonView from 'vue-json-views';
+    import G2 from '@antv/g2';
+
 
     export default {
 
@@ -138,6 +122,11 @@
             jsonEditor,
             jsonView
         },
+
+        mounted() {
+            this.draw()
+        },
+
         methods: {
 
             // 报告详情
@@ -175,6 +164,95 @@
             handleClick() {
             },
 
+            draw() {
+                const data = [
+                    {item: '事例一', count: 40, percent: 0.4},
+                    {item: '事例二', count: 21, percent: 0.21},
+                    {item: '事例三', count: 17, percent: 0.17},
+                    {item: '事例四', count: 13, percent: 0.13},
+                    {item: '事例五', count: 9, percent: 0.09},
+                ];
+                const chart = new G2.Chart({
+                    container: 'c2',
+                    autoFit: true,
+                    height: 0,
+                });
+                chart.data(data);
+                chart.scale('percent', {
+                    formatter: (val) => {
+                        val = val * 100 + '%';
+                        return val;
+                    },
+                });
+                chart.coordinate('theta', {
+                    radius: 0.75,
+                    innerRadius: 0.6,
+                });
+                chart.tooltip({
+                    showTitle: false,
+                    showMarkers: false,
+                    itemTpl: '<li class="g2-tooltip-list-item"><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>',
+                });
+// 辅助文本
+                chart
+                    .annotation()
+                    .text({
+                        position: ['50%', '50%'],
+
+                        style: {
+                            fontSize: 14,
+                            fill: '#8c8c8c',
+                            textAlign: 'center',
+                        },
+                        offsetY: -20,
+                    })
+                    .text({
+                        position: ['50%', '50%'],
+
+                        style: {
+                            fontSize: 20,
+                            fill: '#8c8c8c',
+                            textAlign: 'center',
+                        },
+                        offsetX: -10,
+                        offsetY: 20,
+                    })
+                    .text({
+                        position: ['50%', '50%'],
+
+                        style: {
+                            fontSize: 14,
+                            fill: '#8c8c8c',
+                            textAlign: 'center',
+                        },
+                        offsetY: 20,
+                        offsetX: 20,
+                    });
+                chart
+                    .interval()
+                    .adjust('stack')
+                    .position('percent')
+                    .color('item')
+                    .label('percent', (percent) => {
+                        return {
+                            content: (data) => {
+                                return `${data.item}: ${percent * 100}%`;
+                            },
+                        };
+                    })
+                    .tooltip('item*percent', (item, percent) => {
+                        percent = percent * 100 + '%';
+                        return {
+                            name: item,
+                            value: percent,
+                        };
+                    });
+
+                chart.interaction('element-active');
+
+                chart.render();
+            },
+
         },
 
         computed: {
@@ -196,16 +274,15 @@
 
 <style scoped>
   .header {
-    /*width: 100%;*/
-    height: 100px;
+    height: 18%;
     padding-left: 20px;
     padding-top: 20px;
-    background-color: whitesmoke;
+    background-color: beige;
     /*border: red 0.5px solid;*/
   }
 
   .content {
-    height: 82%;
+    height: 76%;
     background-color: #DCDCDC;
     display: flex;
   }
@@ -263,5 +340,9 @@
   .el-table__expanded-cell[class*=cell] {
     /* padding: 20px 50px; */
     padding: 6px;
+  }
+
+  .text-wrapper {
+    white-space: pre-wrap;
   }
 </style>

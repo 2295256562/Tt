@@ -13,6 +13,11 @@ export const register = params => {
   return $axios.post('reg/', params)
 };
 
+// 数据表
+export const Datareport = params => {
+  return $axios.get('count/')
+};
+
 // 添加项目
 export const addProject = params => {
   return $axios({method: 'post', url: 'add_project/', data: params})

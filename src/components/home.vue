@@ -44,9 +44,16 @@
             <el-menu-item index="3-4" class="iconfont icon-yiliaohangyedeICON- mar_item">专项测试</el-menu-item>
           </el-submenu>
 
+          <el-submenu index="/web">
+            <template slot="title"><i class="iconfont icon-icon-menu-m0640 mar"></i><span> web测试</span></template>
+            <el-menu-item index="/web/Headers" class="iconfont icon-zhenduan mar_item">用例管理</el-menu-item>
+            <el-menu-item index="/web/APIlist" class="iconfont icon-yongliceshi mar_item">对象管理</el-menu-item>
+            <el-menu-item index="/web/APIreport" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>
+          </el-submenu>
+
           <!--任务管理-->
           <el-submenu index="/task">
-            <template slot="title"><i class="iconfont icon-renwuguanli mar"></i><span>任务管理</span></template>
+            <template slot="title"><i class="iconfont icon-renwuguanli mar"></i><span> 任务管理</span></template>
             <el-menu-item index="/task/Tasklist" class="iconfont icon-dingshirenwu1 mar_item">定时任务</el-menu-item>
             <!--            <el-menu-item index="/api/APIlist" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>-->
             <!--            <el-menu-item index="/api/APIreport" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>-->
@@ -153,7 +160,7 @@
     flex-direction: column;
     min-height: 100%;
     width: 100%;
-    overflow: auto;
+    /*overflow: auto;*/
   }
 
   .user_tab {
