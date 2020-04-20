@@ -36,7 +36,7 @@ const $axios = axios.create({
   // 设置超时时间
   timeout: 30000,
   // 基础url，会在请求url中自动添加前置链接
-  baseURL:  'http://127.0.0.1:8000/api/v1'
+  baseURL:  process.env.API_HOST + 'v1'
 })
 Vue.prototype.$http = axios // 这里并发请求以便在组件使用this.$http.all()，具体看dashborad页面
 
