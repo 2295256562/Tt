@@ -112,7 +112,7 @@ export const listAPiInter = params => {
 };
 
 // 搜索请求头
-export const filterHeader = params => { return $axios.get('Filterheader/?project_name='+params) };
+export const filterHeader = params => { return $axios.get('Filterheader/search/?='+params) };
 
 // 执行测试任务接口
 export const testTask = params => { return $axios.post('testTask/', params) };

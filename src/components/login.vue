@@ -87,8 +87,8 @@
                     this.$router.push({name: 'Index'});
                     // this.$message.success("登陆成功")
                 }).catch(err => {
-                    console.log(err.data);
-                    this.$message.error(err.data.non_field_errors)
+                    // console.log(err);
+                    this.$message.error("用户名或密码错误")
                 })
             },
 

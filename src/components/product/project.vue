@@ -47,8 +47,8 @@
 
       <div class="tab">
         <!-- 表格 -->
-        <el-table :data="projectData"  border style="width: 100%; height: 90%" header-align="center" >
-          <el-table-column prop="project_name" label="项目名称"  size="small" width="180" align="center"></el-table-column>
+        <el-table :data="projectData" border style="width: 100%; height: 90%" header-align="center">
+          <el-table-column prop="project_name" label="项目名称" size="small" width="180" align="center"></el-table-column>
           <el-table-column prop="create_user" label="项目创建人" align="center" size="small"></el-table-column>
           <el-table-column prop="create_time" label="项目创建日期" align="center" size="small"></el-table-column>
           <el-table-column label="操作" align="center" size="small">

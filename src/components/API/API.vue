@@ -77,7 +77,7 @@
                   <el-input v-model="item.key" placeholder="KEY" size="small" style="width: 28%"></el-input>
                   <el-input style="width: 30%" v-model="item.value" size="small" placeholder="VALUE"></el-input>
                   <el-input v-model="item.desc" placeholder="DESCRIPTION" size="small" style="width: 25%"></el-input>
-                  <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949" style="padding-left: 7%"></el-switch>
+                  <el-switch v-model="item.initiate" active-color="#13ce66" inactive-color="#ff4949" ></el-switch>
                   <i @click="DelRequestParams(index)" class="el-icon-remove-outline addParams"></i>
                 </div>
                 <el-button @click="addRequestParams" type="primary" plain size="small"
@@ -195,7 +195,7 @@
       <!--校验结果-->
       <div style="margin-top: 120px;margin-left: 10px;height:24%">
         <p>校验结果:</p>
-        <div style="height: 100%;width: 96%;background-color: burlywood;margin-top: 10px"></div>
+        <div style="height: 96%;width: 96%;background-color: burlywood;margin-top: 10px"></div>
       </div>
     </div>
   </div>
@@ -437,7 +437,7 @@
                 const obj = {
                     url: this.domain + this.apiFrom.url,
                     method: this.apiFrom.method,
-                    params: this.Request_data,
+                    params: this.apiFrom.type === 2 ? JSON.parse(this.$refs.editor.getValue()) : this.Request_data,
                     headers: this.HeadersList,
                     type: this.apiFrom.type,
                     checkType: this.apiFrom.checkType,
@@ -543,7 +543,7 @@
     background-color: antiquewhite;
     float: left;
     width: 28%;
-    height: 100%;
+    height: 98%;
   }
 
   .api-right > .el-form > .details {

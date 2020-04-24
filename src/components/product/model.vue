@@ -31,9 +31,9 @@
                 <el-option v-for="item in optionsModel" :key="item" :label="item" :value="item">{{item}}</el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="模块描述">
-              <el-input :rows="2" type="textarea" v-model="modelform.desc" placeholder="输入描述"></el-input>
-            </el-form-item>
+<!--            <el-form-item label="模块描述">-->
+<!--              <el-input :rows="2" type="textarea" v-model="modelform.desc" placeholder="输入描述"></el-input>-->
+<!--            </el-form-item>-->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="quxiao">取 消</el-button>
@@ -100,7 +100,7 @@
                     // project_name: '',
                     project_id: null,
                     model_name: "",
-                    desc: ''
+                    // desc: ''
                 },
                 soureproduct: [],
                 handlepage: 1,
