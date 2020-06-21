@@ -21,7 +21,6 @@
 
     </div>
 
-
     <div class="content">
       <div class="taskResult">
         <div style="height: 20px;padding-left: 40px;line-height: 40px;">任务结果</div>
@@ -66,14 +65,17 @@
                       </div>
                       <div style=" width: 46%; height: 328px; border: Window 1px solid; margin-left: 10%">
                         <div style="border-bottom: Window solid 1px; height: 36px;text-align: center;line-height: 36px">
-                          请求参数
+                          预期结果
                         </div>
-                        <json-view :data="props.row.case_params" style="height: 100%;overflow: auto"/>
+                        <json-view :data="props.row.case_expect" style="height: 100%;overflow: auto"/>
                       </div>
                     </div>
                   </el-tab-pane>
                   <el-tab-pane label="执行日志" name="third">
-                    <div class="text-wrapper">{{props.row.case_log}}</div>
+                    <div class="text-wrapper" style="color:red,font-size:18px">
+                      <div v-for="(item, index) in props.row.case_log">{{item}}</div>
+
+                    </div>
                   </el-tab-pane>
                 </el-tabs>
               </template>
@@ -93,7 +95,7 @@
     import {reportinfo, caseReport} from '../../api/api'
     import jsonEditor from "../jsonEdit";
     import jsonView from 'vue-json-views';
-    import G2 from '@antv/g2';
+    import {Chart} from '@antv/g2';
 
 
     export default {
@@ -140,13 +142,17 @@
                 this.R_CasePass = res.data.data.R_CasePass;
                 this.R_CaseFail = res.data.data.R_CaseFail;
                 this.GetCaseListInfo()
+                this.draw()
             },
 
             // 获取用例详情
             GetCaseListInfo() {
                 const ids = this.TaskNo;
                 caseReport(ids).then(res => {
-                    this.tableData = res.data.data.results;
+                    this.tableData = res.data.data.results.map(it => {
+                        it.case_log = it.case_log.split('</br>')
+                        return it
+                    });
                 })
             },
 
@@ -172,85 +178,30 @@
                     {item: '事例四', count: 13, percent: 0.13},
                     {item: '事例五', count: 9, percent: 0.09},
                 ];
-                const chart = new G2.Chart({
+                const chart = new Chart({
                     container: 'c2',
                     autoFit: true,
-                    height: 0,
+                    height: 80,
+                    width:80
                 });
                 chart.data(data);
-                chart.scale('percent', {
-                    formatter: (val) => {
-                        val = val * 100 + '%';
-                        return val;
-                    },
-                });
+
                 chart.coordinate('theta', {
                     radius: 0.75,
                     innerRadius: 0.6,
                 });
-                chart.tooltip({
-                    showTitle: false,
-                    showMarkers: false,
-                    itemTpl: '<li class="g2-tooltip-list-item"><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>',
-                });
-// 辅助文本
-                chart
-                    .annotation()
-                    .text({
-                        position: ['50%', '50%'],
 
-                        style: {
-                            fontSize: 14,
-                            fill: '#8c8c8c',
-                            textAlign: 'center',
-                        },
-                        offsetY: -20,
-                    })
-                    .text({
-                        position: ['50%', '50%'],
-
-                        style: {
-                            fontSize: 20,
-                            fill: '#8c8c8c',
-                            textAlign: 'center',
-                        },
-                        offsetX: -10,
-                        offsetY: 20,
-                    })
-                    .text({
-                        position: ['50%', '50%'],
-
-                        style: {
-                            fontSize: 14,
-                            fill: '#8c8c8c',
-                            textAlign: 'center',
-                        },
-                        offsetY: 20,
-                        offsetX: 20,
-                    });
+                // 辅助文本
                 chart
                     .interval()
                     .adjust('stack')
                     .position('percent')
-                    .color('item')
-                    .label('percent', (percent) => {
-                        return {
-                            content: (data) => {
-                                return `${data.item}: ${percent * 100}%`;
-                            },
-                        };
-                    })
-                    .tooltip('item*percent', (item, percent) => {
-                        percent = percent * 100 + '%';
-                        return {
-                            name: item,
-                            value: percent,
-                        };
-                    });
+                    .color('item');
 
                 chart.interaction('element-active');
 
                 chart.render();
+
             },
 
         },
@@ -283,7 +234,7 @@
 
   .content {
     height: 76%;
-    background-color: #DCDCDC;
+    background-color: #dcdcdc;
     display: flex;
   }
 
@@ -292,7 +243,7 @@
     width: 50%;
     height: 94%;
     margin: 20px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
 
   .taskchart {
@@ -300,10 +251,8 @@
     margin: 20px;
     width: auto;
     height: auto;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
-
-
 </style>
 <style>
   .content {
@@ -319,7 +268,7 @@
   }
 
   .el-table .success-row {
-    background: #3CB371;
+    background: #3cb371;
   }
 
   .demo-table-expand {
@@ -337,7 +286,7 @@
     width: 52%;
   }
 
-  .el-table__expanded-cell[class*=cell] {
+  .el-table__expanded-cell[class*='cell'] {
     /* padding: 20px 50px; */
     padding: 6px;
   }

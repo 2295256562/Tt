@@ -149,3 +149,11 @@ export const TimeTaskList = params => { return $axios.get('TimeTaskList?page='+p
 
 // 任务详情
 export const TaskInfo = params => { return $axios.get('TaskInfo/'+ params) };
+
+export const API = params => { return $axios.get('apilist/') };
+
+// 接口table
+export const tablist = params => { return $axios.get('ListApiTab/project='+project+"&tag="+tag)}
+
+// 获取接口数据
+export const Getapi = params => { return $axios.get('get_api/'+params) }

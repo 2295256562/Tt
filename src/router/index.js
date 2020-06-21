@@ -9,9 +9,11 @@ import Home from '@/components/home.vue'
 import Project from "@/components/product/project";
 import Model from "@/components/product/model";
 import APIlist from "../components/API/APIlist";
-import APIreport from  "../components/API/APIreport";
-import APIreportinfo from  "../components/API/reportinfo";
-import Headers from  "../components/API/project_headers";
+import APIreport from "../components/API/APIreport";
+import APIreportinfo from "../components/API/reportinfo";
+import ApiMap from "../components/API/ApiMap";
+import Headers from "../components/API/project_headers";
+import Interface from "../components/API/apitree";
 import taskList from "../components/task/taskList";
 import addTask from "../components/task/addTask";
 import ElementUI from 'element-ui';
@@ -37,8 +39,8 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home,
-      children :[
-        { path: 'index', name: 'Index', component: Index }
+      children: [
+        {path: 'index', name: 'Index', component: Index}
       ]
     },
 
@@ -64,11 +66,18 @@ export default new Router({
       name: 'API',
       component: Home,
       children: [
-        { path: 'APIlist', name: 'APIlist', component: APIlist },
+        {path: 'APIlist', name: 'APIlist', component: APIlist},
         {path: '/APITest', name: "APITest", component: APITest},
         {path: 'APIreport', name: "APIreport", component: APIreport},
         {path: '/api/APIreport/info', name: "info", component: APIreportinfo},
         {path: 'Headers', name: "Headers", component: Headers},
+        {path: 'API', name: "API", component: ApiMap},
+        {
+          path: 'interface', name: "interface", component: Interface, children: [
+            {path: 'list', name: "list", component: () => import("../components/API/list")},
+            {path: 'apiInfo', name: "apiInfo", component: () => import("../components/API/apiInfo")},
+          ]
+        },
       ]
     },
     {

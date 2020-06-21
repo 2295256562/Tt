@@ -22,9 +22,11 @@
           <!--接口自动化-->
           <el-submenu index="/api">
             <template slot="title"><i class="iconfont icon-icon-menu-m0640 mar"></i><span> 接口测试</span></template>
-            <el-menu-item index="/api/Headers" class="iconfont icon-zhenduan mar_item">请求头管理</el-menu-item>
-            <el-menu-item index="/api/APIlist" class="iconfont icon-yongliceshi mar_item">接口用例</el-menu-item>
-            <el-menu-item index="/api/APIreport" class="iconfont icon-baogao mar_item">用例报告</el-menu-item>
+            <el-menu-item index="/api/Headers" >请求头部</el-menu-item>
+<!--            <el-menu-item index="/api/API" class="iconfont icon-zhenduan mar_item">接口管理</el-menu-item>-->
+            <el-menu-item index="/api/interface">接口列表</el-menu-item>
+            <el-menu-item index="/api/APIlist" >接口用例</el-menu-item>
+            <el-menu-item index="/api/APIreport" >用例报告</el-menu-item>
           </el-submenu>
 
           <!--app测试-->

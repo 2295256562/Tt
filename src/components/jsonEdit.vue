@@ -26,7 +26,7 @@ export default {
     value(value) {
       const editorValue = this.jsonEditor.getValue();
       if (value !== editorValue) {
-        this.jsonEditor.setValue(JSON.stringify(this.value, null, 4))
+        this.jsonEditor.setValue(JSON.stringify(this.value, null, 2))
       }
     }
   },
@@ -35,7 +35,7 @@ export default {
       lineNumbers: true,
       mode: 'application/json',
       gutters: ['CodeMirror-lint-markers'],
-      theme: 'idea',
+      theme: 'eclipse',
       lint: true,
       indentUnit: 4
     })

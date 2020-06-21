@@ -68,6 +68,7 @@
             <template>
               <div v-if="apiFrom.type === 2 ">
                 <jsonEditor ref="editor" :value="paramsJson" :read-only="true"/>
+
               </div>
 
               <div class="de-input request request_params" v-else >
@@ -257,7 +258,8 @@
                 BelongModel: [], // 所属模块
                 json: {},
                 // Reparams: this.paramsJson,
-                paramsJson: {},
+
+
                 Request_data: [
                     {key: '', value: '', desc: '', initiate: true}
                 ],
@@ -266,6 +268,7 @@
 
                 caselist: [],
                 list: [],
+                paramsJson:``
             }
         },
         watch: {

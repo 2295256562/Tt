@@ -26,10 +26,14 @@
           <el-form :model="projectForm" label-width="80px" label-position="left" :inline="true"
           >
             <el-form-item label="项目名称:" prop="name">
-              <el-input v-model="projectForm.project_name" size="small" style="width: 180px"
+              <el-input v-model="projectForm.project_name" size="small" style="width: 360px"
                         placeholder="请输入项目名称"></el-input>
             </el-form-item>
-            <el-form-item :label="'项目环境'+ index" v-for="(item, index) in env" :key="index"
+            <el-form-item label="项目文档:" prop="name">
+              <el-input v-model="projectForm.document" size="small" style="width: 360px"
+                        placeholder="请输入项目文档地址"></el-input>
+            </el-form-item>
+            <el-form-item :label="'项目环境'+ (index+1)" v-for="(item, index) in env" :key="index"
                           :model="projectForm.project_address">
               <el-input v-model="item.envName" size="small" style="width: 180px" placeholder="请输入项目环境名称"></el-input>
               <el-input v-model="item.envAddres" size="small" style="width: 180px" placeholder="请输入环境域名"></el-input>
@@ -72,158 +76,160 @@
 </template>
 
 <script>
-    import {addProject, projectList, projectInfo, Delproject, seachProject} from "../../api/api";
-    import $axios from "../../api/ajaxRequest";
+  import {addProject, projectList, projectInfo, Delproject, seachProject} from "../../api/api";
+  import $axios from "../../api/ajaxRequest";
 
 
-    export default {
+  export default {
 
-        created() {
+    created() {
+      this.Lproject()
+    },
+
+    data() {
+      return {
+        projectName: '',
+        projectData: [],
+        handlepage: 1,
+        total: 0,
+        dailogTitleType: "",
+        env: [{envName: '', envAddres: ''}],
+        dialogFormVisible: false,
+        projectForm: {project_name: '', document: ' ', project_address: this.env},
+        editid: null,
+      };
+    },
+
+
+    methods: {
+      //新增项目环境
+      addAddres() {
+        this.env.push(
+            {envName: '', envAddres: ''}
+        )
+      },
+
+      // 分页角标
+      handleCurrentChange(val) {
+        this.handlepage = val;
+        this.Lproject()
+      },
+
+      // 项目搜索
+      seachbtn() {
+        seachProject(this.projectName).then(res => {
+          this.projectData = res.data.data.results;
+          this.total = res.data.data.count;
+        })
+      },
+
+      // 清空按钮
+      clearbtn() {
+        this.projectName = '';
+        this.Lproject()
+      },
+
+      //新增项目接口
+      addProjectApi() {
+        console.log(this.editid, '22');
+        const obj = {
+          project_name: this.projectForm.project_name,
+          project_address: this.env,
+          document: this.projectForm.document || ''
+        };
+
+        if (this.editid != null) {
+          $axios.put('u_project/' + this.editid + '/', obj).then(res => {
+            this.editid = null;
+            this.dialogFormVisible = false;
+            this.$message.success('修改成功');
             this.Lproject()
-        },
-
-        data() {
-            return {
-                projectName: '',
-                projectData: [],
-                handlepage: 1,
-                total: 0,
-                dailogTitleType: "",
-                env: [{envName: '', envAddres: ''}],
-                dialogFormVisible: false,
-                projectForm: {project_name: '', project_address: this.env},
-                editid: null,
-            };
-        },
-
-
-        methods: {
-            //新增项目环境
-            addAddres() {
-                this.env.push(
-                    {envName: '', envAddres: ''}
-                )
-            },
-
-            // 分页角标
-            handleCurrentChange(val) {
-                this.handlepage = val;
+          })
+        } else {
+          addProject(obj).then(res => {
+                this.dialogFormVisible = false;
+                this.$message.success('添加成功');
                 this.Lproject()
-            },
-
-            // 项目搜索
-            seachbtn() {
-                seachProject(this.projectName).then(res => {
-                    this.projectData = res.data.data.results;
-                    this.total = res.data.data.count;
-                })
-            },
-
-            // 清空按钮
-            clearbtn() {
-                this.projectName = '';
-                this.Lproject()
-            },
-
-            //新增项目接口
-            addProjectApi() {
-                console.log(this.editid, '22');
-                const obj = {
-                    project_name: this.projectForm.project_name,
-                    project_address: this.env
-                };
-
-                if (this.editid != null) {
-                    $axios.put('u_project/' + this.editid + '/', obj).then(res => {
-                        this.editid = null;
-                        this.dialogFormVisible = false;
-                        this.$message.success('修改成功');
-                        this.Lproject()
-                    })
-                } else {
-                    addProject(obj).then(res => {
-                            this.dialogFormVisible = false;
-                            this.$message.success('添加成功');
-                            this.Lproject()
-                        }
-                    )
-                }
-
-            },
-
-            // 新增项目弹窗
-            AddProject() {
-                this.dialogFormVisible = true;
-                this.dailogTitleType = "新增"
-            },
-
-            // 编辑项目弹窗
-            handleEdit(row) {
-                console.log(row.id);
-                this.editid = row.id;
-                this.dailogTitleType = "编辑";
-                this.dialogFormVisible = true;
-                this.projectRev(row.id)
-            },
-
-            // 项目详情 project
-            projectRev(row) {
-                projectInfo(row).then(res => {
-                    console.log(res.data.data);
-                    this.projectForm = res.data.data;
-                    this.env = res.data.data.project_address
-                })
-            },
-
-            // 删除项目
-            handleDelete(row) {
-                Delproject(row.id).then(res => {
-                    this.$message.success("删除成功");
-                    this.Lproject()
-                })
-            },
-
-            //项目列表
-            Lproject() {
-                projectList(this.handlepage).then(res => {
-                    // console.log(res.data.data);
-                    this.projectData = res.data.data.results;
-                    this.total = res.data.data.count;
-
-                })
-            },
-
-            //删除项目环境
-            deleteAdders(index) {
-                this.env.splice(index, 1);
-                if (this.env.length === 0) {
-                    this.env.push({envNmae: '', envAddres: ''});
-                    this.$message.warning("无法删除")
-                }
-            },
-
-            // 销毁弹窗
-            handleClose(done) {
-                this.$confirm('确认关闭？').then(_ => {
-                    done();
-                }).catch(_ => {
-                });
-            },
-
-            //关闭弹窗事件
-            closeDialog(done) {
-                done();
-                this.dialogFormVisible = false
-            },
-            open() {
-                this.env = [{envName: '', envAddres: ''}],
-                    this.projectForm = {
-                        project_address: [],
-                        projectName: ''
-                    }
-            }
+              }
+          )
         }
+
+      },
+
+      // 新增项目弹窗
+      AddProject() {
+        this.dialogFormVisible = true;
+        this.dailogTitleType = "新增"
+      },
+
+      // 编辑项目弹窗
+      handleEdit(row) {
+        console.log(row.id);
+        this.editid = row.id;
+        this.dailogTitleType = "编辑";
+        this.dialogFormVisible = true;
+        this.projectRev(row.id)
+      },
+
+      // 项目详情 project
+      projectRev(row) {
+        projectInfo(row).then(res => {
+          console.log(res.data.data);
+          this.projectForm = res.data.data;
+          this.env = res.data.data.project_address
+        })
+      },
+
+      // 删除项目
+      handleDelete(row) {
+        Delproject(row.id).then(res => {
+          // console.log(res.data)
+          this.$message.success(res.data.data);
+          this.Lproject()
+        })
+      },
+
+      //项目列表
+      Lproject() {
+        projectList(this.handlepage).then(res => {
+          // console.log(res.data.data);
+          this.projectData = res.data.data.results;
+          this.total = res.data.data.count;
+
+        })
+      },
+
+      //删除项目环境
+      deleteAdders(index) {
+        this.env.splice(index, 1);
+        if (this.env.length === 0) {
+          this.env.push({envNmae: '', envAddres: ''});
+          this.$message.warning("无法删除")
+        }
+      },
+
+      // 销毁弹窗
+      handleClose(done) {
+        this.$confirm('确认关闭？').then(_ => {
+          done();
+        }).catch(_ => {
+        });
+      },
+
+      //关闭弹窗事件
+      closeDialog(done) {
+        done();
+        this.dialogFormVisible = false
+      },
+      open() {
+        this.env = [{envName: '', envAddres: ''}],
+            this.projectForm = {
+              project_address: [],
+              projectName: ''
+            }
+      }
     }
+  }
 </script>
 
 <style scoped>

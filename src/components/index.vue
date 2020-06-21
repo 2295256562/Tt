@@ -61,30 +61,12 @@
             }
         },
         mounted() {
-            this.drawCart()
+            console.log(this.data)
+
         },
         methods: {
             drawCart() {
-                const data = [{
-                "create_time": "2020-02-27",
-                "count": 1
-            },
-            {
-                "create_time": "2020-03-03",
-                "count": 2
-            },
-            {
-                "create_time": "2020-03-09",
-                "count": 2
-            },
-            {
-                "create_time": "2020-03-10",
-                "count": 1
-            },
-            {
-                "create_time": "2020-03-26",
-                "count": 2
-            }];
+                const data = this.data
                 const chart = new G2.Chart({
                     container: 'c1',
                     forceFit: true,
@@ -93,14 +75,19 @@
                 });
                 chart.source(data);
                 chart.scale({
-                    create_time: {
-                        range: [0, 1],
-                    },
                     count: {
                         min: 0,
-                        max: 20,
-                        tickInterval: 2,
+                        max:100,
+                        // tickInterval: 5,
+
                     },
+                });
+                chart.axis("name", {
+                  create_time: {
+                    rotate: Math.PI / 3,
+                    textAlign: "start",
+                    textBaseline: "middle"
+                  }
                 });
                 chart.tooltip({
                     showCrosshairs: true, // 展示 Tooltip 辅助线
@@ -108,12 +95,6 @@
                 });
                 chart.line().position('create_time*count').label('count');
                 chart.point().position('create_time*count')
-                    .size(4)
-                    .shape('circle')
-                    .style({
-                        stroke: '#fff',
-                        lineWidth: 1
-                    });
                 chart.render();
             },
 
@@ -123,6 +104,7 @@
                     this.project = res.data.data.PROJECTSUM;
                     this.TimerTask = res.data.data.TimerTask;
                     this.data = res.data.data.RECENTLYADDCASE
+                    this.drawCart()
                 })
             }
         }

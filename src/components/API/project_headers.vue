@@ -41,10 +41,10 @@
             </el-select>
 
             <!--value-->
-            <el-input v-model="item.headersSetValue" placeholder="value" size="mini" style="width: 45%"></el-input>
+            <el-input v-model="item.headersSetValue" placeholder="value" size="mini" style="width: 54%"></el-input>
 
             <!--是否启用-->
-            <el-switch v-model="item.headersStatus" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+<!--            <el-switch v-model="item.headersStatus" active-color="#13ce66" inactive-color="#ff4949"></el-switch>-->
           </div>
           <div>
             <!--新增按钮 -->
@@ -80,7 +80,7 @@
                 handlepage: 1,
                 total: 0,
                 HeadersList: [
-                    {headerSetKey: '', headersSetValue: '', headersStatus: true,}
+                    {headerSetKey: '', headersSetValue: ''}
                 ],
                 headersListkey: [
                     {value: 'Accept', lable: 'Accept'},
@@ -103,7 +103,13 @@
                 this.editid = row.id;
                 headersinfo(this.editid).then(res => {
                     // console.log(res.data.data)
-                    this.HeadersList = res.data.data.headers
+                    this.HeadersList = Object.entries(res.data.data.headers).map(it => {
+                      const obj = {}
+                      obj.headerSetKey = it[0]
+                      obj.headersSetValue = it[1]
+                      return obj
+                    })
+                  console.log(this.HeadersList)
                 })
             },
 
@@ -125,7 +131,7 @@
             //新增headers参数
             addHeaders() {
                 this.HeadersList.push(
-                    {headerSetKey: '', headersSetValue: '', headersStatus: true}
+                    {headerSetKey: '', headersSetValue: '',}
                 );
                 this.$nextTick(() => {
                     this.HoldBot('headersID')
@@ -135,9 +141,17 @@
             headershandle() {
                 console.log(this.editid);
                 console.log(this.HeadersList);
+                const obj = {}
+                for (const item of this.HeadersList) {
+                  console.log(item, 'item')
+                  obj[item.headerSetKey] = item.headersSetValue
+                }
+
                 const header = {
-                    'headers': this.HeadersList
+                    'headers': obj
                 };
+                // console.log(this)
+                // return
                 // put 接口
                 $axios.put('updateHeaders/' + this.editid + '/', header).then(res => {
                     this.$message.success('修改成功');
